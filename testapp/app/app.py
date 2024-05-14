@@ -1,6 +1,5 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
-import psycopg2
 import os
 
 app = Flask(__name__)
@@ -9,15 +8,26 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 
+class Visit(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    ip = db.Column(db.String(255), nullable=False)
+    timestamp = db.Column(db.DateTime, server_default=db.func.now())
+
+@app.before_first_request
+def create_tables():
+    db.create_all()
+
 @app.route('/')
 def index():
-    conn = psycopg2.connect(app.config['SQLALCHEMY_DATABASE_URI'])
-    cursor = conn.cursor()
-    cursor.execute('SELECT COUNT(DISTINCT ip) AS unique_visitors FROM visits;')
-    result = cursor.fetchone()
-    cursor.close()
-    conn.close()
-    return jsonify(result)
+    try:
+        ip = request.remote_addr
+        new_visit = Visit(ip=ip)
+        db.session.add(new_visit)
+        db.session.commit()
+        unique_visitors = db.session.query(db.func.count(db.distinct(Visit.ip))).scalar()
+        return jsonify(unique_visitors=unique_visitors)
+    except Exception as e:
+        return jsonify(error=str(e)), 500
 
 @app.route('/version')
 def version():
