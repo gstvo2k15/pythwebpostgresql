@@ -1,0 +1,97 @@
+version: '3.8'
+
+services:
+  app1:
+    build:
+      context: ./app
+    environment:
+      - FLASK_APP=app.py
+    ports:
+      - "5001:5000"
+    depends_on:
+      - db
+    networks:
+      - monitoring_net
+
+  app2:
+    build:
+      context: ./app
+    environment:
+      - FLASK_APP=app.py
+    ports:
+      - "5002:5000"
+    depends_on:
+      - db
+    networks:
+      - monitoring_net
+
+  db:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    ports:
+      - "5432:5432"
+    networks:
+      - monitoring_net
+
+  nginx:
+    build:
+      context: ./nginx
+    ports:
+      - "80:80"
+    depends_on:
+      - app1
+      - app2
+    networks:
+      - monitoring_net
+
+  prometheus:
+    image: prom/prometheus:v2.52.0
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+    networks:
+      - monitoring_net
+
+  grafana:
+    image: grafana/grafana:10.1.10
+    volumes:
+      - ./grafana/provisioning/:/etc/grafana/provisioning/
+    ports:
+      - "3000:3000"
+    networks:
+      - monitoring_net
+
+  cadvisor:
+    image: secureimages/cadvisor:0.47.2-alpine-3.18.2
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+    ports:
+      - "8080:8080"
+    privileged: true
+    networks:
+      - monitoring_net
+
+  node_exporter:
+    image: prom/node-exporter:v1.8.0
+    ports:
+      - "9100:9100"
+    networks:
+      - monitoring_net
+
+  blackbox_exporter:
+    image: prom/blackbox-exporter:v0.25.0
+    ports:
+      - "9115:9115"
+    networks:
+      - monitoring_net
+
+networks:
+  monitoring_net:
+

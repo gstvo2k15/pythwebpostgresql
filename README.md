@@ -9,16 +9,25 @@ testapp/
 │   ├── Dockerfile
 │   ├── requirements.txt
 │   └── app.py
-├── db/
+├── blackbox_exporter/
 │   └── Dockerfile
-├── nginx/
-│   └── nginx.conf
-├── prometheus/
-│   └── prometheus.yml
+├── node_exporter/
+│   └── Dockerfile
 ├── grafana/
+│   ├── Dockerfile
 │   └── provisioning/
 │       └── datasources/
 │           └── datasource.yml
+├── db/
+│   └── Dockerfile
+├── cadvisor/
+│   └── Dockerfile
+├── nginx/
+│   ├── Dockerfile
+│   └── nginx.conf
+├── prometheus/
+│   ├── Dockerfile
+│   └── prometheus.yml
 └── docker-compose.yml
 ```
 
