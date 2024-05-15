@@ -1,0 +1,102 @@
+<mxfile host="app.diagrams.net" modified="2024-05-15T12:04:58.896Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:125.0) Gecko/20100101 Firefox/125.0" etag="mGAKkJpwJj9Fvm3Fj68m" version="24.4.0" type="device">
+  <diagram name="Página-1" id="3HHXwtwGGDwGG4CzEM6J">
+    <mxGraphModel dx="989" dy="468" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="wpDbzl-RKeaYImy_MSfO-1" value="&lt;b style=&quot;font-size: 13px;&quot;&gt;Local deployment with docker-compose&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="308.8" y="10" width="171.2" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="wpDbzl-RKeaYImy_MSfO-2" value="Actor" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" vertex="1" parent="1">
+          <mxGeometry x="30" y="160" width="30" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="wpDbzl-RKeaYImy_MSfO-6" value="" style="dashed=0;outlineConnect=0;html=1;align=center;labelPosition=center;verticalLabelPosition=bottom;verticalAlign=top;shape=mxgraph.webicons.github;gradientColor=#DFDEDE" vertex="1" parent="1">
+          <mxGeometry x="79.4" y="198.29999999999998" width="42.4" height="32.4" as="geometry" />
+        </mxCell>
+        <mxCell id="wpDbzl-RKeaYImy_MSfO-7" value="" style="image;sketch=0;aspect=fixed;html=1;points=[];align=center;fontSize=12;image=img/lib/mscae/Docker.svg;" vertex="1" parent="1">
+          <mxGeometry x="210" y="119" width="50" height="41" as="geometry" />
+        </mxCell>
+        <mxCell id="wpDbzl-RKeaYImy_MSfO-8" value="" style="image;sketch=0;aspect=fixed;html=1;points=[];align=center;fontSize=12;image=img/lib/mscae/VM_Linux.svg;" vertex="1" parent="1">
+          <mxGeometry x="75.6" y="147.7" width="50" height="46" as="geometry" />
+        </mxCell>
+        <mxCell id="wpDbzl-RKeaYImy_MSfO-27" value="docker-compose up -d" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="161.2" y="89.5" width="147.6" height="29.5" as="geometry" />
+        </mxCell>
+        <mxCell id="wpDbzl-RKeaYImy_MSfO-28" value="" style="curved=1;endArrow=classic;html=1;rounded=0;entryX=-0.089;entryY=0.488;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" target="wpDbzl-RKeaYImy_MSfO-7">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="125.6" y="210" as="sourcePoint" />
+            <mxPoint x="175.6" y="160" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="175.6" y="210" />
+              <mxPoint x="125.6" y="160" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="wpDbzl-RKeaYImy_MSfO-29" value="git clone https://github.com/gstvo2k15/pythwebpostgresql.git" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="20" y="240" width="190" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="wpDbzl-RKeaYImy_MSfO-40" value="" style="group" vertex="1" connectable="0" parent="1">
+          <mxGeometry x="310" y="70" width="176.2" height="140.5" as="geometry" />
+        </mxCell>
+        <mxCell id="wpDbzl-RKeaYImy_MSfO-37" value="" style="image;aspect=fixed;perimeter=ellipsePerimeter;html=1;align=center;shadow=0;dashed=0;spacingTop=3;image=img/lib/active_directory/web_server.svg;" vertex="1" parent="wpDbzl-RKeaYImy_MSfO-40">
+          <mxGeometry x="68.30000000000001" y="28.30000000000001" width="40" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="wpDbzl-RKeaYImy_MSfO-38" value="&lt;div&gt;nginx loadbalancer &amp;amp; reverse proxy&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="wpDbzl-RKeaYImy_MSfO-40">
+          <mxGeometry x="14.300000000000011" y="90" width="147.6" height="29.5" as="geometry" />
+        </mxCell>
+        <mxCell id="wpDbzl-RKeaYImy_MSfO-39" value="" style="ellipse;shape=cloud;whiteSpace=wrap;html=1;align=center;fillColor=none;" vertex="1" parent="wpDbzl-RKeaYImy_MSfO-40">
+          <mxGeometry width="176.2" height="140.5" as="geometry" />
+        </mxCell>
+        <mxCell id="wpDbzl-RKeaYImy_MSfO-41" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.131;entryY=0.555;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="wpDbzl-RKeaYImy_MSfO-7" target="wpDbzl-RKeaYImy_MSfO-39">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="wpDbzl-RKeaYImy_MSfO-42" value="" style="image;aspect=fixed;perimeter=ellipsePerimeter;html=1;align=center;shadow=0;dashed=0;spacingTop=3;image=img/lib/active_directory/database_server.svg;" vertex="1" parent="1">
+          <mxGeometry x="610" y="114.5" width="41" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="wpDbzl-RKeaYImy_MSfO-54" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="wpDbzl-RKeaYImy_MSfO-43" target="wpDbzl-RKeaYImy_MSfO-42">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="wpDbzl-RKeaYImy_MSfO-43" value="" style="image;aspect=fixed;perimeter=ellipsePerimeter;html=1;align=center;shadow=0;dashed=0;spacingTop=3;image=img/lib/active_directory/generic_server.svg;" vertex="1" parent="1">
+          <mxGeometry x="530" y="190" width="28.000000000000004" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="wpDbzl-RKeaYImy_MSfO-53" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="wpDbzl-RKeaYImy_MSfO-44" target="wpDbzl-RKeaYImy_MSfO-42">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="wpDbzl-RKeaYImy_MSfO-44" value="" style="image;aspect=fixed;perimeter=ellipsePerimeter;html=1;align=center;shadow=0;dashed=0;spacingTop=3;image=img/lib/active_directory/generic_server.svg;" vertex="1" parent="1">
+          <mxGeometry x="530" y="60" width="28.000000000000004" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="wpDbzl-RKeaYImy_MSfO-45" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.875;exitY=0.5;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="1" source="wpDbzl-RKeaYImy_MSfO-39" target="wpDbzl-RKeaYImy_MSfO-44">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="469" y="140" />
+              <mxPoint x="508" y="140" />
+              <mxPoint x="508" y="85" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="wpDbzl-RKeaYImy_MSfO-47" value="App2" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="520.2" y="240" width="47.6" height="29.5" as="geometry" />
+        </mxCell>
+        <mxCell id="wpDbzl-RKeaYImy_MSfO-48" value="App1" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="520.2" y="110" width="47.6" height="29.5" as="geometry" />
+        </mxCell>
+        <mxCell id="wpDbzl-RKeaYImy_MSfO-49" value="Db" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="583.4000000000001" y="160.5" width="47.6" height="29.5" as="geometry" />
+        </mxCell>
+        <mxCell id="wpDbzl-RKeaYImy_MSfO-52" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.883;exitY=0.501;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="1" source="wpDbzl-RKeaYImy_MSfO-39">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="530" y="214" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="475" y="140" />
+              <mxPoint x="508" y="140" />
+              <mxPoint x="508" y="214" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="wpDbzl-RKeaYImy_MSfO-56" value="http://local_ip/" style="sketch=0;pointerEvents=1;shadow=0;dashed=0;html=1;strokeColor=none;fillColor=#434445;aspect=fixed;labelPosition=center;verticalLabelPosition=bottom;verticalAlign=top;align=center;outlineConnect=0;shape=mxgraph.vvd.web_browser;" vertex="1" parent="1">
+          <mxGeometry x="369.40000000000003" y="210.5" width="50" height="35.5" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
