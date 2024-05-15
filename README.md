@@ -60,66 +60,53 @@ testapp-node_exporter-1       "/bin/node_exporter"     node_exporter       runni
 testapp-prometheus-1          "/bin/prometheus --c…"   prometheus          running              0.0.0.0:9090->9090/tcp, :::9090->9090/tcp
 ```
 
-Errors showed:
-```
-[root@k8smaster testapp]# docker-compose logs -f --tail=5
-[root@k8smaster testapp]# docker-compose logs -f --tail=5
-testapp-node_exporter-1      | ts=2024-05-14T21:17:29.394Z caller=node_exporter.go:118 level=info collector=watchdog
-testapp-node_exporter-1      | ts=2024-05-14T21:17:29.394Z caller=node_exporter.go:118 level=info collector=xfs
-testapp-node_exporter-1      | ts=2024-05-14T21:17:29.394Z caller=node_exporter.go:118 level=info collector=zfs
-testapp-node_exporter-1      | ts=2024-05-14T21:17:29.396Z caller=tls_config.go:313 level=info msg="Listening on" address=[::]:9100
-testapp-node_exporter-1      | ts=2024-05-14T21:17:29.396Z caller=tls_config.go:316 level=info msg="TLS is disabled." http2=false address=[::]:9100
-testapp-cadvisor-1           | W0514 21:17:29.334967       1 machine_libipmctl.go:64] There are no NVM devices!
-testapp-db-1                 | 2024-05-14 21:17:33.801 UTC [1] LOG:  listening on IPv4 address "0.0.0.0", port 5432
-testapp-db-1                 | 2024-05-14 21:17:33.801 UTC [1] LOG:  listening on IPv6 address "::", port 5432
-testapp-db-1                 | 2024-05-14 21:17:33.832 UTC [1] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
-testapp-db-1                 | 2024-05-14 21:17:33.878 UTC [50] LOG:  database system was shut down at 2024-05-14 21:17:33 UTC
-testapp-db-1                 | 2024-05-14 21:17:33.911 UTC [1] LOG:  database system is ready to accept connections
-testapp-app2-1               | WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
-testapp-app2-1               |  * Running on all addresses (0.0.0.0)
-testapp-app2-1               |  * Running on http://127.0.0.1:5000
-testapp-app2-1               |  * Running on http://172.25.0.9:5000
-testapp-app1-1               | WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
-testapp-app2-1               | Press CTRL+C to quit
-testapp-app1-1               |  * Running on all addresses (0.0.0.0)
-testapp-app1-1               |  * Running on http://127.0.0.1:5000
-testapp-app1-1               |  * Running on http://172.25.0.8:5000
-testapp-app1-1               | Press CTRL+C to quit
-testapp-grafana-1            | logger=migrator t=2024-05-14T21:17:37.390579497Z level=info msg="Executing migration" id="Add index for created in annotation table"
-testapp-grafana-1            | logger=migrator t=2024-05-14T21:17:37.420349657Z level=info msg="Executing migration" id="Add index for updated in annotation table"
-testapp-grafana-1            | logger=migrator t=2024-05-14T21:17:37.447461447Z level=info msg="Executing migration" id="Convert existing annotations from seconds to milliseconds"
-testapp-nginx-1              | 10-listen-on-ipv6-by-default.sh: info: Enabled listen on IPv6 in /etc/nginx/conf.d/default.conf
-testapp-nginx-1              | /docker-entrypoint.sh: Sourcing /docker-entrypoint.d/15-local-resolvers.envsh
-testapp-nginx-1              | /docker-entrypoint.sh: Launching /docker-entrypoint.d/20-envsubst-on-templates.sh
-testapp-nginx-1              | /docker-entrypoint.sh: Launching /docker-entrypoint.d/30-tune-worker-processes.sh
-testapp-grafana-1            | logger=migrator t=2024-05-14T21:17:37.473012194Z level=info msg="Executing migration" id="Add epoch_end column"
-testapp-grafana-1            | logger=migrator t=2024-05-14T21:17:37.510472204Z level=info msg="Executing migration" id="Add index for epoch_end"
-testapp-nginx-1              | /docker-entrypoint.sh: Configuration complete; ready for start up
-testapp-prometheus-1         | ts=2024-05-14T21:17:29.265Z caller=main.go:1153 level=info msg="TSDB started"
-testapp-prometheus-1         | ts=2024-05-14T21:17:29.265Z caller=main.go:1335 level=info msg="Loading configuration file" filename=/etc/prometheus/prometheus.yml
-testapp-prometheus-1         | ts=2024-05-14T21:17:29.268Z caller=main.go:1372 level=info msg="Completed loading of configuration file" filename=/etc/prometheus/prometheus.yml totalDuration=3.461699ms db_storage=3.297µs remote_storage=3.789µs web_handler=1.128µs query_engine=2.549µs scrape=1.265637ms scrape_sd=870.41µs notify=2.852µs notify_sd=2.994µs rules=4.655µs tracing=30.155µs
-testapp-prometheus-1         | ts=2024-05-14T21:17:29.268Z caller=main.go:1114 level=info msg="Server is ready to receive web requests."
-```
 
-URL check:
+Main URL check:
 ```
 http://192.168.1.33/
-unique_visitors	3
+unique_visitors	2
 
 
 http://192.168.1.33/version
 version	"1.0.0"
 
 
-[root@k8smaster testapp]# docker exec -it testapp-db-1 psql -U postgres -c 'SELECT * FROM visits;'
- id | ip | timestamp
-----+----+-----------
-(0 rows)
 
-[root@k8smaster testapp]#
-[root@k8smaster testapp]# docker exec -it testapp-db-1 psql -U postgres -c 'SELECT DISTINCT ip FROM visits;'
- ip
-----
-(0 rows)
+[root@k8smaster testapp]# docker exec -it testapp-db-1 psql -U postgres -c 'SELECT * FROM visitors;'
+ id  |     ip     |         timestamp
+-----+------------+----------------------------
+ 412 | 172.29.0.2 | 2024-05-15 12:09:23.876457
+ 413 | 172.29.0.2 | 2024-05-15 12:09:35.568058
+ 414 | 172.29.0.2 | 2024-05-15 12:09:38.876494
 
+
+[root@k8smaster testapp]# curl -ik http://localhost/
+HTTP/1.1 200 OK
+Server: nginx/1.26.0
+Date: Wed, 15 May 2024 12:10:17 GMT
+Content-Type: application/json
+Content-Length: 22
+Connection: keep-alive
+
+{"unique_visitors":2}
+
+```
+
+
+
+Prometheus URLs:
+```
+http://192.168.1.33:9090/targets?search=
+
+http://192.168.1.33:5001/metrics
+
+http://192.168.1.33:5002/metrics
+
+http://192.168.1.33:8080/containers/
+
+http://192.168.1.33:9115/metrics
+
+http://192.168.1.33:9100/metrics
+
+http://192.168.1.33:3000/login
 ```
