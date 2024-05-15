@@ -1,12 +1,6 @@
-<<<<<<< HEAD
 <mxfile host="app.diagrams.net" modified="2024-05-15T12:04:58.896Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:125.0) Gecko/20100101 Firefox/125.0" etag="mGAKkJpwJj9Fvm3Fj68m" version="24.4.0" type="device">
   <diagram name="Página-1" id="3HHXwtwGGDwGG4CzEM6J">
     <mxGraphModel dx="989" dy="468" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
-=======
-<mxfile host="app.diagrams.net" modified="2024-05-15T12:04:38.822Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:125.0) Gecko/20100101 Firefox/125.0" etag="xty21TTw3HTxlLj3-yef" version="24.4.0" type="github">
-  <diagram name="Página-1" id="3HHXwtwGGDwGG4CzEM6J">
-    <mxGraphModel dx="989" dy="501" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
->>>>>>> 4b60e7e36706a496d3c9af8d273beaa1d2e12c3a
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
