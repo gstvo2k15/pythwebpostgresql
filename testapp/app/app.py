@@ -1,8 +1,11 @@
 from flask import Flask, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
+from prometheus_flask_exporter import PrometheusMetrics
 import os
 
 app = Flask(__name__)
+metrics = PrometheusMetrics(app)
+
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'postgresql://postgres:postgres@db:5432/postgres')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
@@ -21,7 +24,7 @@ def create_tables():
 @app.route('/')
 def index():
     try:
-        ip = request.remote_addr
+        ip = request.headers.get('X-Forwarded-For', request.remote_addr).split(',')[0].strip()
         new_visitor = Visitor(ip=ip)
         db.session.add(new_visitor)
         db.session.commit()
@@ -36,3 +39,4 @@ def version():
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
+

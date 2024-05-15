@@ -3,4 +3,4 @@ Flask-SQLAlchemy==2.5.1
 psycopg2-binary==2.9.3
 Werkzeug==2.2.3
 SQLAlchemy==1.4.46
-
+prometheus-flask-exporter==0.23.0
