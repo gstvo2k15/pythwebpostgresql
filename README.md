@@ -110,3 +110,16 @@ http://192.168.1.33:9100/metrics
 
 http://192.168.1.33:3000/login
 ```
+
+## Technologies used locally
+
+- Git: For version control.
+- Github: Repository storage of our project.
+- Docker/docker-compose: For containerizing applications.
+- Nginx: Frontend as a load balancer and reverse proxy of our app.
+- PostgreSQL: As the backend database.
+- Prometheus: For monitoring and alerting.
+- Grafana: Tool for visuale metrics.
+- Exporters: Collectors of container metrics about service resources, etc.
+
+

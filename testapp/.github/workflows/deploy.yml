@@ -1,0 +1,60 @@
+name: Publish Docker image
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Login to GitLab Container Registry
+        run: echo "${{ secrets.CI_REGISTRY_PASSWORD }}" | docker login ${{ secrets.CI_REGISTRY }} -u ${{ secrets.CI_REGISTRY_USER }} --password-stdin
+
+      - name: Build and push Docker image for App
+        run: |
+          docker build -t ${{ secrets.CI_REGISTRY }}/terraformazure/app:latest ./testapp/app
+          docker push ${{ secrets.CI_REGISTRY }}/terraformazure/app:latest
+
+      - name: Build and push Docker image for Blackbox Exporter
+        run: |
+          docker build -t ${{ secrets.CI_REGISTRY }}/terraformazure/blackbox_exporter:latest ./testapp/blackbox_exporter
+          docker push ${{ secrets.CI_REGISTRY }}/terraformazure/blackbox_exporter:latest
+
+      - name: Build and push Docker image for cAdvisor
+        run: |
+          docker build -t ${{ secrets.CI_REGISTRY }}/terraformazure/cadvisor:latest ./testapp/cadvisor
+          docker push ${{ secrets.CI_REGISTRY }}/terraformazure/cadvisor:latest
+
+      - name: Build and push Docker image for PostgreSQL
+        run: |
+          docker build -t ${{ secrets.CI_REGISTRY }}/terraformazure/postgresql:latest ./testapp/db
+          docker push ${{ secrets.CI_REGISTRY }}/terraformazure/postgresql:latest
+
+      - name: Build and push Docker image for Grafana
+        run: |
+          docker build -t ${{ secrets.CI_REGISTRY }}/terraformazure/grafana:latest ./testapp/grafana
+          docker push ${{ secrets.CI_REGISTRY }}/terraformazure/grafana:latest
+
+      - name: Build and push Docker image for NGINX
+        run: |
+          docker build -t ${{ secrets.CI_REGISTRY }}/terraformazure/nginx:latest ./testapp/nginx
+          docker push ${{ secrets.CI_REGISTRY }}/terraformazure/nginx:latest
+
+      - name: Build and push Docker image for Node Exporter
+        run: |
+          docker build -t ${{ secrets.CI_REGISTRY }}/terraformazure/node_exporter:latest ./testapp/node_exporter
+          docker push ${{ secrets.CI_REGISTRY }}/terraformazure/node_exporter:latest
+
+      - name: Build and push Docker image for Prometheus
+        run: |
+          docker build -t ${{ secrets.CI_REGISTRY }}/terraformazure/prometheus:latest ./testapp/prometheus
+          docker push ${{ secrets.CI_REGISTRY }}/terraformazure/prometheus:latest
