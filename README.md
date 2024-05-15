@@ -123,3 +123,49 @@ http://192.168.1.33:3000/login
 - Exporters: Collectors of container metrics about service resources, etc.
 
 
+```
+Clients: The users access the application.
+
+Load Balancer: NGINX acting as a reverse proxy and load balancer for the pplication instances.
+
+Application Instances: Two Flask application instances (app1 and app2) running n containers.
+
+Database: A PostgreSQL database for storing persistent data.
+
+Monitoring: Prometheus for collecting metrics and Grafana for visualizing them.
+
+Exporters: Various exporters (Node Exporter, Blackbox Exporter, cAdvisor) for collecting different types of metrics.
+
+Kubernetes Cluster: Managed by AKS (Azure Kubernetes Service) where all these omponents run.
+
+Container Registry: GitLab Container Registry for storing Docker images.
+```
+
+## How to Start the Service from Scratch
+
+### Clone the Repository:
+    Clone the repository from GitHub to your local machine.
+
+### Set Up GitLab Container Registry:
+    Configure GitLab to use the container registry.
+
+### Push Docker Images to GitLab Container Registry:
+    Use GitHub Actions to build and push Docker images to the GitLab Container Registry.
+
+### Set Up Terraform for AKS:
+        Write Terraform scripts to provision an AKS cluster.
+        Configure Terraform to deploy the AKS cluster in Azure.
+
+### Deploy Kubernetes Manifests:
+        Write Kubernetes manifests for deployments, services, ConfigMaps, and secrets.
+        Use GitLab CI/CD to apply these manifests to the AKS cluster.
+
+### Scaling the Number of Servers
+
+To scale the number of servers:
+
+- Horizontal Pod Autoscaler:
+  Use Kubernetes Horizontal Pod Autoscaler (HPA) to automatically scale the number of application instances based on CPU/memory usage.
+
+- Scaling Nodes:
+  Use the AKS cluster autoscaler to automatically add or remove nodes based on the resource demands of the pods.
