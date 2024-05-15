@@ -8,7 +8,8 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 
-class Visit(db.Model):
+class Visitor(db.Model):
+    __tablename__ = 'visitors'
     id = db.Column(db.Integer, primary_key=True)
     ip = db.Column(db.String(255), nullable=False)
     timestamp = db.Column(db.DateTime, server_default=db.func.now())
@@ -21,10 +22,10 @@ def create_tables():
 def index():
     try:
         ip = request.remote_addr
-        new_visit = Visit(ip=ip)
-        db.session.add(new_visit)
+        new_visitor = Visitor(ip=ip)
+        db.session.add(new_visitor)
         db.session.commit()
-        unique_visitors = db.session.query(db.func.count(db.distinct(Visit.ip))).scalar()
+        unique_visitors = db.session.query(db.func.count(db.distinct(Visitor.ip))).scalar()
         return jsonify(unique_visitors=unique_visitors)
     except Exception as e:
         return jsonify(error=str(e)), 500
@@ -35,4 +36,3 @@ def version():
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
-
