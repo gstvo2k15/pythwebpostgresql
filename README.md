@@ -151,5 +151,40 @@ http://192.168.1.33:3000/login
 ```
 
 
+## How to Upload the Application to the Cloud using CI/CD with GitLab and Deploy it to Azure AKS using Terraform
+Prerequisites
+```
+    GitHub Repository: Contains the source code and configuration files.
+    GitLab: Used for CI/CD.
+    Azure: For infrastructure deployment.
+    Terraform: For infrastructure as code.
+    GitLab Runner: To run CI/CD tasks.
+```
 
+Steps to Configure the CI/CD Pipeline
+```
+    Set up Secrets on GitHub:
+        Add secrets on GitHub to:
+            CI_REGISTRY: GitLab container registry URL.
+            CI_REGISTRY_USER: GitLab username.
+            CI_REGISTRY_PASSWORD: GitLab password or access token.
+            AZURE_CLIENT_ID: Azure client ID.
+            AZURE_CLIENT_SECRET: Azure client secret.
+            AZURE_SUBSCRIPTION_ID: Azure subscription ID.
+            AZURE_TENANT_ID: Azure tenant ID.
+```
+    Create the .gitlab-ci.yml File on your GitLab repository:
+```
 
+```
+
+Create and Configure Terraform Files:
+```
+    - main.tf: Defines the AKS infrastructure.
+    - variables.tf: Defines the variables necessary for the deployment.
+    - outputs.tf: Defines the outputs that Terraform should provide.
+```
+Run the Pipeline:
+```
+    Push the changes to GitHub, which triggers the GitLab pipeline to build the Docker images and deploy them to AKS using Terraform.
+```
