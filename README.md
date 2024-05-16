@@ -1,36 +1,106 @@
-# pythwebpostgresql
-Basic python web server deployment in docker-compose with postgresql backend
+# Project Title: pythwebpostgresql
+## Overview
+This project consists of a Flask application with a PostgreSQL database backend, monitored by Prometheus and Grafana. The application is load balanced and expose using Nginx, and all services are containerized using Docker.
+
 
 ## Basic diagram
 
 ```
-testapp/
-├── app/
-│   ├── Dockerfile
-│   ├── requirements.txt
-│   └── app.py
-├── blackbox_exporter/
-│   └── Dockerfile
-├── node_exporter/
-│   └── Dockerfile
-├── grafana/
-│   ├── Dockerfile
-│   └── provisioning/
-│       └── datasources/
-│           └── datasource.yml
-├── db/
-│   ├── Dockerfile
-│   └── init.sql
-├── cadvisor/
-│   └── Dockerfile
-├── nginx/
-│   ├── Dockerfile
-│   └── nginx.conf
-├── prometheus/
-│   ├── Dockerfile
-│   └── prometheus.yml
-└── docker-compose.yml
+pythwebpostgresql
+└──
+   testapp/
+   ├── app/
+   │   ├── Dockerfile
+   │   ├── requirements.txt
+   │   └── app.py
+   ├── blackbox_exporter/
+   │   └── Dockerfile
+   ├── node_exporter/
+   │   └── Dockerfile
+   ├── grafana/
+   │   ├── Dockerfile
+   │   └── provisioning/
+   │       └── datasources/
+   │           └── datasource.yml
+   ├── db/
+   │   ├── Dockerfile
+   │   └── init.sql
+   ├── cadvisor/
+   │   └── Dockerfile
+   ├── nginx/
+   │   ├── Dockerfile
+   │   └── nginx.conf
+   ├── prometheus/
+   │   ├── Dockerfile
+   │   └── prometheus.yml
+   └── docker-compose.yml
 ```
+
+
+## Summary of technologies used
+- Python
+- Flask
+- PostgreSQL
+- Docker
+- Prometheus
+- Grafana
+- Nginx
+- Terraform
+- GitHub Actions
+- GitLab CI
+- Azure AKS
+
+
+## Local Development Setup
+### Prerequisites
+- Docker - Using the lightest images possible using Alpine as the basis of our Dockerfile build.
+- Docker Compose 
+
+
+## Technologies used locally
+- Git: For version control.
+- Github: Repository storage of our project.
+- Docker/docker-compose: For containerizing applications.
+- Nginx: Frontend as a load balancer and reverse proxy of our app.
+- PostgreSQL: As the backend database.
+- Prometheus: For monitoring and alerting.
+- Grafana: Tool for visuale metrics.
+- Exporters: Collectors of container metrics about service resources, etc.
+
+
+### Installation Steps
+
+1. Install git, docker and docker-compose:
+- Ubuntu22 steps:
+```
+apt-get install -y git docker.io 
+docker ps
+curl -L "https://github.com/docker/compose/releases/download/v2.12.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/bin/docker-compose
+chmod +x /usr/bin/docker-compose
+docker-compose version
+```
+
+- Rocky9 steps:
+```
+dnf -y install docker-ce --nobest --allowerasing 
+systemctl enable --now docker
+systemctl status docker
+
+yum install -y docker git
+curl -L "https://github.com/docker/compose/releases/download/v2.12.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/bin/docker-compose
+chmod +x /usr/bin/docker-compose
+docker-compose version
+```
+
+
+2. Clone the Repository:
+   ```
+   git clone https://github.com/gstvo2k15/pythwebpostgresql.git
+   cd pythwebpostgresql/testapp
+   docker-compose up -d
+   
+   ```
+
 
 ## Initial steps to performance
 
@@ -46,7 +116,12 @@ Example output:
 docker-compose down --remove-orphans
 docker-compose build
 docker-compose up -d
- 
+
+[root@k8smaster testapp]# time docker-compose up -d
+real    0m49.690s
+user    0m1.259s
+sys     0m1.010s
+
 [root@k8smaster testapp]# docker-compose ps
 NAME                          COMMAND                  SERVICE             STATUS               PORTS
 testapp-app1-1                "flask run --host=0.…"   app1                running              0.0.0.0:5001->5000/tcp, :::5001->5000/tcp
@@ -61,7 +136,7 @@ testapp-prometheus-1          "/bin/prometheus --c…"   prometheus          run
 ```
 
 
-Main URL check:
+## Main URL check (Change to your own IP address):
 ```
 http://192.168.1.33/
 unique_visitors	2
@@ -69,7 +144,6 @@ unique_visitors	2
 
 http://192.168.1.33/version
 version	"1.0.0"
-
 
 
 [root@k8smaster testapp]# docker exec -it testapp-db-1 psql -U postgres -c 'SELECT * FROM visitors;'
@@ -89,12 +163,9 @@ Content-Length: 22
 Connection: keep-alive
 
 {"unique_visitors":2}
-
 ```
 
-
-
-Prometheus URLs:
+## Prometheus URLs:
 ```
 http://192.168.1.33:9090/targets?search=
 
@@ -111,61 +182,79 @@ http://192.168.1.33:9100/metrics
 http://192.168.1.33:3000/login
 ```
 
-## Technologies used locally
 
-- Git: For version control.
-- Github: Repository storage of our project.
-- Docker/docker-compose: For containerizing applications.
-- Nginx: Frontend as a load balancer and reverse proxy of our app.
-- PostgreSQL: As the backend database.
-- Prometheus: For monitoring and alerting.
-- Grafana: Tool for visuale metrics.
-- Exporters: Collectors of container metrics about service resources, etc.
-
-
+## How to Upload the Application to the Cloud using CI/CD with GitLab and Deploy it to Azure AKS using Terraform
+Prerequisites
 ```
-Clients: The users access the application.
-
-Load Balancer: NGINX acting as a reverse proxy and load balancer for the pplication instances.
-
-Application Instances: Two Flask application instances (app1 and app2) running n containers.
-
-Database: A PostgreSQL database for storing persistent data.
-
-Monitoring: Prometheus for collecting metrics and Grafana for visualizing them.
-
-Exporters: Various exporters (Node Exporter, Blackbox Exporter, cAdvisor) for collecting different types of metrics.
-
-Kubernetes Cluster: Managed by AKS (Azure Kubernetes Service) where all these omponents run.
-
-Container Registry: GitLab Container Registry for storing Docker images.
+    GitHub Repository: Contains the source code and configuration files.
+    GitLab: Used for CI/CD.
+    Azure: For infrastructure deployment.
+    Terraform: For infrastructure as code.
+    GitLab Runner: To run CI/CD tasks.
 ```
 
-## How to Start the Service from Scratch
+Steps to Configure the CI/CD Pipeline
+```
+    Set up Secrets on GitHub:
+        Add secrets on GitHub to:
+            CI_REGISTRY: GitLab container registry URL.
+            CI_REGISTRY_USER: GitLab username.
+            CI_REGISTRY_PASSWORD: GitLab password or access token.
+            AZURE_CLIENT_ID: Azure client ID.
+            AZURE_CLIENT_SECRET: Azure client secret.
+            AZURE_SUBSCRIPTION_ID: Azure subscription ID.
+            AZURE_TENANT_ID: Azure tenant ID.
+```
+    Create the .gitlab-ci.yml File on your GitLab repository:
+```
+image: hashicorp/terraform:latest
 
-### Clone the Repository:
-    Clone the repository from GitHub to your local machine.
+services:
+  - docker:dind
 
-### Set Up GitLab Container Registry:
-    Configure GitLab to use the container registry.
+variables:
+  DOCKER_HOST: tcp://docker:2375/
+  DOCKER_DRIVER: overlay2
 
-### Push Docker Images to GitLab Container Registry:
-    Use GitHub Actions to build and push Docker images to the GitLab Container Registry.
+stages:
+  - deploy
 
-### Set Up Terraform for AKS:
-        Write Terraform scripts to provision an AKS cluster.
-        Configure Terraform to deploy the AKS cluster in Azure.
+before_script:
+  - apk add --no-cache curl jq
+  - curl -sL https://aka.ms/InstallAzureCLIDeb | bash
+  - az login --service-principal -u "$AZURE_CLIENT_ID" -p "$AZURE_CLIENT_SECRET" --tenant "$AZURE_TENANT_ID"
+  - az aks get-credentials --resource-group "$AZURE_RESOURCE_GROUP" --name "$AZURE_AKS_CLUSTER_NAME"
+  - terraform init
+  - terraform apply -auto-approve
 
-### Deploy Kubernetes Manifests:
-        Write Kubernetes manifests for deployments, services, ConfigMaps, and secrets.
-        Use GitLab CI/CD to apply these manifests to the AKS cluster.
+deploy:
+  stage: deploy
+  script:
+    - export NGINX_IP=$(kubectl get svc nginx -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+    - echo "NGINX Public IP: $NGINX_IP"
+    - echo "CI_ENVIRONMENT_URL=http://$NGINX_IP" >> $GITLAB_ENVIRONMENT_FILE
+  environment:
+    name: production
+    url: http://$NGINX_IP
 
-### Scaling the Number of Servers
+```
 
-To scale the number of servers:
+Create and Configure Terraform Files:
+```
+    - main.tf: Defines the AKS infrastructure.
+    - variables.tf: Defines the variables necessary for the deployment.
+    - outputs.tf: Defines the outputs that Terraform should provide.
+```
+Run the Pipeline:
+```
+    Push the changes to GitHub, which triggers the GitLab pipeline to build the Docker images and deploy them to AKS using Terraform.
+```
 
-- Horizontal Pod Autoscaler:
-  Use Kubernetes Horizontal Pod Autoscaler (HPA) to automatically scale the number of application instances based on CPU/memory usage.
-
-- Scaling Nodes:
-  Use the AKS cluster autoscaler to automatically add or remove nodes based on the resource demands of the pods.
+How to scalate number of servers
+We must to modify the `node_count` value in the Terraform `main.tf` file:
+```hcl
+default_node_pool {
+  name       = "default"
+  node_count = <desired-node-count>
+  vm_size    = "Standard_DS2_v2"
+}
