@@ -6,32 +6,34 @@ This project consists of a Flask application with a PostgreSQL database backend,
 ## Basic diagram
 
 ```
-testapp/
-├── app/
-│   ├── Dockerfile
-│   ├── requirements.txt
-│   └── app.py
-├── blackbox_exporter/
-│   └── Dockerfile
-├── node_exporter/
-│   └── Dockerfile
-├── grafana/
-│   ├── Dockerfile
-│   └── provisioning/
-│       └── datasources/
-│           └── datasource.yml
-├── db/
-│   ├── Dockerfile
-│   └── init.sql
-├── cadvisor/
-│   └── Dockerfile
-├── nginx/
-│   ├── Dockerfile
-│   └── nginx.conf
-├── prometheus/
-│   ├── Dockerfile
-│   └── prometheus.yml
-└── docker-compose.yml
+pythwebpostgresql
+└──
+   testapp/
+   ├── app/
+   │   ├── Dockerfile
+   │   ├── requirements.txt
+   │   └── app.py
+   ├── blackbox_exporter/
+   │   └── Dockerfile
+   ├── node_exporter/
+   │   └── Dockerfile
+   ├── grafana/
+   │   ├── Dockerfile
+   │   └── provisioning/
+   │       └── datasources/
+   │           └── datasource.yml
+   ├── db/
+   │   ├── Dockerfile
+   │   └── init.sql
+   ├── cadvisor/
+   │   └── Dockerfile
+   ├── nginx/
+   │   ├── Dockerfile
+   │   └── nginx.conf
+   ├── prometheus/
+   │   ├── Dockerfile
+   │   └── prometheus.yml
+   └── docker-compose.yml
 ```
 
 
@@ -67,11 +69,36 @@ testapp/
 
 
 ### Installation Steps
-1. Clone the Repository:
+
+1. Install git, docker and docker-compose:
+- Ubuntu22 steps:
+```
+apt-get install -y git docker.io 
+docker ps
+curl -L "https://github.com/docker/compose/releases/download/v2.12.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/bin/docker-compose
+chmod +x /usr/bin/docker-compose
+docker-compose version
+```
+
+- Rocky9 steps:
+```
+dnf -y install docker-ce --nobest --allowerasing 
+systemctl enable --now docker
+systemctl status docker
+
+yum install -y docker git
+curl -L "https://github.com/docker/compose/releases/download/v2.12.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/bin/docker-compose
+chmod +x /usr/bin/docker-compose
+docker-compose version
+```
+
+
+2. Clone the Repository:
    ```
    git clone https://github.com/gstvo2k15/pythwebpostgresql.git
-   cd testapp
+   cd pythwebpostgresql/testapp
    docker-compose up -d
+   
    ```
 
 
@@ -89,7 +116,12 @@ Example output:
 docker-compose down --remove-orphans
 docker-compose build
 docker-compose up -d
- 
+
+[root@k8smaster testapp]# time docker-compose up -d
+real    0m49.690s
+user    0m1.259s
+sys     0m1.010s
+
 [root@k8smaster testapp]# docker-compose ps
 NAME                          COMMAND                  SERVICE             STATUS               PORTS
 testapp-app1-1                "flask run --host=0.…"   app1                running              0.0.0.0:5001->5000/tcp, :::5001->5000/tcp
@@ -104,7 +136,7 @@ testapp-prometheus-1          "/bin/prometheus --c…"   prometheus          run
 ```
 
 
-## Main URL check:
+## Main URL check (Change to your own IP address):
 ```
 http://192.168.1.33/
 unique_visitors	2
