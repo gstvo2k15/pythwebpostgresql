@@ -249,3 +249,12 @@ Run the Pipeline:
 ```
     Push the changes to GitHub, which triggers the GitLab pipeline to build the Docker images and deploy them to AKS using Terraform.
 ```
+
+How to scalate number of servers
+We must to modify the `node_count` value in the Terraform `main.tf` file:
+```hcl
+default_node_pool {
+  name       = "default"
+  node_count = <desired-node-count>
+  vm_size    = "Standard_DS2_v2"
+}
