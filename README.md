@@ -51,8 +51,8 @@ testapp/
 
 ## Local Development Setup
 ### Prerequisites
-- Docker
-- Docker Compose
+- Docker - Using the lightest images possible using Alpine as the basis of our Dockerfile build.
+- Docker Compose 
 
 
 ## Technologies used locally
