@@ -1,5 +1,7 @@
-# pythwebpostgresql
-Basic python web server deployment in docker-compose with postgresql backend
+# Project Title: pythwebpostgresql
+## Overview
+This project consists of a Flask application with a PostgreSQL database backend, monitored by Prometheus and Grafana. The application is load balanced and expose using Nginx, and all services are containerized using Docker.
+
 
 ## Basic diagram
 
@@ -32,6 +34,47 @@ testapp/
 └── docker-compose.yml
 ```
 
+
+## Summary of technologies used
+- Python
+- Flask
+- PostgreSQL
+- Docker
+- Prometheus
+- Grafana
+- Nginx
+- Terraform
+- GitHub Actions
+- GitLab CI
+- Azure AKS
+
+
+## Local Development Setup
+### Prerequisites
+- Docker
+- Docker Compose
+
+
+## Technologies used locally
+- Git: For version control.
+- Github: Repository storage of our project.
+- Docker/docker-compose: For containerizing applications.
+- Nginx: Frontend as a load balancer and reverse proxy of our app.
+- PostgreSQL: As the backend database.
+- Prometheus: For monitoring and alerting.
+- Grafana: Tool for visuale metrics.
+- Exporters: Collectors of container metrics about service resources, etc.
+
+
+### Installation Steps
+1. Clone the Repository:
+   ```
+   git clone https://github.com/gstvo2k15/pythwebpostgresql.git
+   cd testapp
+   docker-compose up -d
+   ```
+
+
 ## Initial steps to performance
 
 We need to create a basic web server using python or js with postgresql backend that counts the number of unique visitors and displays
@@ -61,7 +104,7 @@ testapp-prometheus-1          "/bin/prometheus --c…"   prometheus          run
 ```
 
 
-Main URL check:
+## Main URL check:
 ```
 http://192.168.1.33/
 unique_visitors	2
@@ -69,7 +112,6 @@ unique_visitors	2
 
 http://192.168.1.33/version
 version	"1.0.0"
-
 
 
 [root@k8smaster testapp]# docker exec -it testapp-db-1 psql -U postgres -c 'SELECT * FROM visitors;'
@@ -89,12 +131,9 @@ Content-Length: 22
 Connection: keep-alive
 
 {"unique_visitors":2}
-
 ```
 
-
-
-Prometheus URLs:
+## Prometheus URLs:
 ```
 http://192.168.1.33:9090/targets?search=
 
@@ -111,15 +150,6 @@ http://192.168.1.33:9100/metrics
 http://192.168.1.33:3000/login
 ```
 
-## Technologies used locally
 
-- Git: For version control.
-- Github: Repository storage of our project.
-- Docker/docker-compose: For containerizing applications.
-- Nginx: Frontend as a load balancer and reverse proxy of our app.
-- PostgreSQL: As the backend database.
-- Prometheus: For monitoring and alerting.
-- Grafana: Tool for visuale metrics.
-- Exporters: Collectors of container metrics about service resources, etc.
 
 
