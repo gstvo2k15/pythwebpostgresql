@@ -207,6 +207,35 @@ Steps to Configure the CI/CD Pipeline
 ```
     Create the .gitlab-ci.yml File on your GitLab repository:
 ```
+image: hashicorp/terraform:latest
+
+services:
+  - docker:dind
+
+variables:
+  DOCKER_HOST: tcp://docker:2375/
+  DOCKER_DRIVER: overlay2
+
+stages:
+  - deploy
+
+before_script:
+  - apk add --no-cache curl jq
+  - curl -sL https://aka.ms/InstallAzureCLIDeb | bash
+  - az login --service-principal -u "$AZURE_CLIENT_ID" -p "$AZURE_CLIENT_SECRET" --tenant "$AZURE_TENANT_ID"
+  - az aks get-credentials --resource-group "$AZURE_RESOURCE_GROUP" --name "$AZURE_AKS_CLUSTER_NAME"
+  - terraform init
+  - terraform apply -auto-approve
+
+deploy:
+  stage: deploy
+  script:
+    - export NGINX_IP=$(kubectl get svc nginx -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+    - echo "NGINX Public IP: $NGINX_IP"
+    - echo "CI_ENVIRONMENT_URL=http://$NGINX_IP" >> $GITLAB_ENVIRONMENT_FILE
+  environment:
+    name: production
+    url: http://$NGINX_IP
 
 ```
 
