@@ -179,35 +179,6 @@ services:
     restart: always
     container_name: kong
 
-  lint:
-    build:
-      context: .
-      dockerfile: Dockerfile.lint
-    networks:
-      - monitoring_net
-    container_name: lint
-    restart: "no"
-
-  sonarqube:
-    image: sonarqube:8.9-community
-    ports:
-      - "9000:9000"
-    networks:
-      - monitoring_net
-    restart: always
-    container_name: sonarqube
-
-  sonar-scanner:
-    build:
-      context: .
-      dockerfile: Dockerfile.sonar-scanner
-    networks:
-      - monitoring_net
-    container_name: sonar-scanner
-    depends_on:
-      - sonarqube
-    restart: "no"
-
 networks:
   monitoring_net:
 
