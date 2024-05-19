@@ -1,4 +1,4 @@
-name: Publish Docker image
+name: Publish Docker image and Trigger GitLab CI
 
 on:
   push:
@@ -58,3 +58,15 @@ jobs:
         run: |
           docker build -t ${{ secrets.CI_REGISTRY }}/terraformazure/prometheus:latest ./testapp/prometheus
           docker push ${{ secrets.CI_REGISTRY }}/terraformazure/prometheus:latest
+
+      - name: Trigger GitLab pipeline
+        env:
+          GITLAB_TOKEN: ${{ secrets.GITLAB_TOKEN }}
+        run: |
+          curl -X POST \
+            -F token=$GITLAB_TOKEN \
+            -F ref=main \
+            https://gstvo2k15.ngrok.dev/api/v4/projects/1/trigger/pipeline
+
+      - name: Notify GitHub
+        run: echo "GitLab pipeline triggered successfully"
