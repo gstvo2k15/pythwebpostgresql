@@ -63,17 +63,21 @@ jobs:
         env:
           GITLAB_TOKEN: ${{ secrets.GITLAB_TOKEN }}
         run: |
-          response=$(curl -s -o response.txt -w "%{http_code}" -X POST \
-            -F token=$GITLAB_TOKEN \
-            -F ref=main \
-            http://192.168.1.41/api/v4/projects/1/trigger/pipeline)
-          cat response.txt
-          echo "Response code: $response"
-          if [ "$response" -ne 201 ]; then
-            echo "Failed to trigger GitLab pipeline"
-            exit 1
-          fi
+          curl -X POST \
+          -F token=$GITLAB_TOKEN \
+          -F ref=main \
+          http://192.168.1.41/api/v4/projects/1/trigger/pipeline
 
       - name: Notify GitHub
         run: echo "GitLab pipeline triggered successfully"
 
+      ###  response=$(curl -s -o response.txt -w "%{http_code}" -X POST \
+      ###  -F token=$GITLAB_TOKEN \
+      ###  -F ref=main \
+      ###  http://192.168.1.41/api/v4/projects/1/trigger/pipeline)
+      ###cat response.txt
+      ###echo "Response code: $response"
+      ###if [ "$response" -ne 201 ]; then
+      ###  echo "Failed to trigger GitLab pipeline"
+      ###  exit 1
+      ###fi
