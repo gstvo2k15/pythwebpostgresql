@@ -1,8 +1,3 @@
-resource "azurerm_resource_group" "main" {
-  name     = var.resource_group_name
-  location = var.location
-}
-
 resource "azurerm_kubernetes_cluster" "main" {
   name                = var.aks_cluster_name
   location            = azurerm_resource_group.main.location
