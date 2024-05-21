@@ -70,3 +70,4 @@ jobs:
 
       - name: Notify GitHub
         run: echo "GitLab pipeline triggered successfully"
+
