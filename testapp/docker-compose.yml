@@ -208,6 +208,7 @@ services:
       - monitoring_net
     container_name: lint
     restart: "no"
+    command: ["sh", "-c", "pylint app > pylint-report.txt"]
 
   sonarqube:
     build:
