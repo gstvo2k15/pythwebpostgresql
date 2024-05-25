@@ -576,7 +576,7 @@
       "type": "row"
     }
   ],
-  "refresh": false,
+  "refresh": "5s",
   "schemaVersion": 38,
   "style": "dark",
   "tags": [
@@ -587,8 +587,8 @@
     "list": []
   },
   "time": {
-    "from": "2024-05-15T02:07:43.396Z",
-    "to": "2024-05-15T14:07:43.396Z"
+    "from": "now-5m",
+    "to": "now"
   },
   "timepicker": {},
   "timezone": "",
