@@ -237,8 +237,6 @@ services:
     restart: "no"
     command: sonar-scanner -Dsonar.host.url=http://sonarqube:9000 -Dsonar.login=your_login_token
       
-
 networks:
   monitoring_net:
-
 
