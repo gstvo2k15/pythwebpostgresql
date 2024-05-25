@@ -233,7 +233,7 @@ services:
     #build:
     # context: ./sonar-scanner
     image: sonarsource/sonar-scanner-cli:latest
-        networks:
+    networks:
       - monitoring_net
     container_name: sonar-scanner
     depends_on:

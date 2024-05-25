@@ -11,5 +11,5 @@ COPY ./app /app
 RUN pip install pylint flake8
 
 # Comando por defecto para ejecutar los linters
-CMD ["sh", "-c", "pylint . && flake8 ."]
+CMD ["sh", "-c", "pylint . && flake8 .", ">pylint-report.txt"]
 
