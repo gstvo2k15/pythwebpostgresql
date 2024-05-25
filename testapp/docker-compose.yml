@@ -217,22 +217,23 @@ services:
     networks:
       - monitoring_net
     restart: always
+    environment:
+      - sonar.jdbc.url=jdbc:postgresql://db:5432/sonarqube
+      - sonar.jdbc.username=sonar
+      - sonar.jdbc.password=sonar
     healthcheck:
       test: ["CMD-SHELL", "curl -f http://localhost:9000 || exit 1"]
       interval: 30s
       timeout: 10s
-      retries: 3
-      start_period: 30s
-    environment:
-      - sonar.secretKeyPath=/etc/sonarqube/sonar_token.txt
-    volumes:
-      - ./sonar-scanner/sonar_token.txt:/etc/sonarqube/sonar_token.txt:ro
+      retries: 10
+      start_period: 60s
     container_name: sonarqube
 
   sonar-scanner:
-    build:
-      context: ./sonar-scanner
-    networks:
+    #build:
+    # context: ./sonar-scanner
+    image: sonarsource/sonar-scanner-cli:latest
+        networks:
       - monitoring_net
     container_name: sonar-scanner
     depends_on:
@@ -242,8 +243,10 @@ services:
       - SONAR_HOST_URL=http://sonarqube:9000
       - SONAR_LOGIN=m/klUDNemJHMhjfGjX1PTIH/FLuZcn+xAbNPQmHrOxA=
     restart: "no"
-    #command: sonar-scanner -Dsonar.host.url=http://sonarqube:9000 -Dsonar.login=your_login_token
+    volumes:
+      - .:/usr/src
+      - ./sonar-scanner.properties:/usr/src/sonar-scanner.properties
+    command: "sonar-scanner -Dproject.settings=/usr/src/sonar-scanner.properties"
       
 networks:
   monitoring_net:
-
