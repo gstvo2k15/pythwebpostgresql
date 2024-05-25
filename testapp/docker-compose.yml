@@ -208,7 +208,9 @@ services:
       - monitoring_net
     container_name: lint
     restart: "no"
-    command: ["sh", "-c", "pylint app > pylint-report.txt"]
+    volumes:
+      - .:/app
+      - ./lint-reports:/app
 
   sonarqube:
     build:
