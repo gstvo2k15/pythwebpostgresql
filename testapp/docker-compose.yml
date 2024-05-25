@@ -223,6 +223,10 @@ services:
       timeout: 10s
       retries: 3
       start_period: 30s
+    environment:
+      - sonar.secretKeyPath=/etc/sonarqube/sonar_token.txt
+    volumes:
+      - ./sonar-scanner/sonar_token.txt:/etc/sonarqube/sonar_token.txt:ro
     container_name: sonarqube
 
   sonar-scanner:
@@ -234,8 +238,11 @@ services:
     depends_on:
       sonarqube:
         condition: service_healthy
+    environment:
+      - SONAR_HOST_URL=http://sonarqube:9000
+      - SONAR_LOGIN=m/klUDNemJHMhjfGjX1PTIH/FLuZcn+xAbNPQmHrOxA=
     restart: "no"
-    command: sonar-scanner -Dsonar.host.url=http://sonarqube:9000 -Dsonar.login=your_login_token
+    #command: sonar-scanner -Dsonar.host.url=http://sonarqube:9000 -Dsonar.login=your_login_token
       
 networks:
   monitoring_net:
