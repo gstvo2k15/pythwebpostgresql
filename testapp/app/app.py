@@ -18,6 +18,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 
+# pylint: disable=too-few-public-methods
 class Visitor(db.Model):
     """
     Modelo de base de datos para registrar las visitas de los usuarios.
@@ -30,15 +31,16 @@ class Visitor(db.Model):
     def __repr__(self):
         return f'<Visitor {self.ip}>'
 
-    # pylint: disable=too-few-public-methods
-
+# Desactivar chequeo no-member de pylint
+# pylint: disable=no-member
 @app.before_first_request
+# pylint: disable=no-member
 def create_tables():
     """
     Crear las tablas de la base de datos antes de la primera solicitud.
     """
-    db.create_all()
     # pylint: disable=no-member
+    db.create_all()
 
 @app.route('/')
 def index():
