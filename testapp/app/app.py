@@ -1,10 +1,11 @@
 """
 App Flask simple para registrar visitas de usuarios y
-exponer las métricas a Prometheus.
+exponer las métricas a Prometheus, además de servir un informe de código.
 """
 
 import os
-from flask import Flask, jsonify, request
+import subprocess
+from flask import Flask, jsonify, request, send_file
 from flask_sqlalchemy import SQLAlchemy
 from prometheus_flask_exporter import PrometheusMetrics
 
@@ -80,5 +81,18 @@ def version():
     return jsonify({"version": "1.0.0"})
 
 
+@app.route('/reportcode')
+def report():
+    """
+    Genera y sirve el informe de pylint.
+    """
+    # Ejecutar pylint y guardar el informe en un archivo
+    with open('pylint_report.txt', 'w', encoding='utf-8') as report_file:
+        subprocess.run(['pylint', 'app.py'], stdout=report_file, check=True)
+    return send_file('pylint_report.txt')
+
+
 if __name__ == '__main__':
+    # Ejecutar autopep8 antes de iniciar la aplicación
+    subprocess.run(['autopep8', 'app.py', '--in-place'], check=True)
     app.run(host='0.0.0.0', port=5000)
