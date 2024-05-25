@@ -1,18 +1,19 @@
-import os  # Importación estándar primero
-from flask import Flask, jsonify, request  # Importaciones de terceros después
-from flask_sqlalchemy import SQLAlchemy
-from prometheus_flask_exporter import PrometheusMetrics
-
-# Añadir una docstring al módulo
 """
 Este módulo proporciona una aplicación Flask simple que registra las visitas de los usuarios y
 expone métricas a través de Prometheus.
 """
 
+import os
+from flask import Flask, jsonify, request
+from flask_sqlalchemy import SQLAlchemy
+from prometheus_flask_exporter import PrometheusMetrics
+
 app = Flask(__name__)
 metrics = PrometheusMetrics(app)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'postgresql://postgres:postgres@db:5432/postgres')
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get(
+    'DATABASE_URL', 'postgresql://postgres:postgres@db:5432/postgres'
+)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
@@ -60,3 +61,4 @@ def version():
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
+
