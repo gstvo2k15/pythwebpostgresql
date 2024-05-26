@@ -75,18 +75,18 @@ services:
       - "3100:3100"
     networks:
       - monitoring_net
-    volumes:
-      - ./loki:/etc/loki:ro,z
-      - ./loki/loki-data:/loki:rw,z
+    #volumes:
+    #  - ./loki:/etc/loki:ro,z
+    #  - ./loki/loki-data:/loki:rw,z
     command: -config.file=/etc/loki/local-config.yaml
     container_name: loki
 
   promtail:
     image: grafana/promtail:2.9.2
     volumes:
-      - /var/log:/var/log
-      - /var/lib/docker/containers:/var/lib/docker/containers
-      - /var/run/docker.sock:/var/run/docker.sock:ro
+      #- /var/log:/var/log
+      #- /var/lib/docker/containers:/var/lib/docker/containers
+      #- /var/run/docker.sock:/var/run/docker.sock:ro
       - ./promtail/config.yml:/etc/promtail/config.yml
     command: -config.file=/etc/promtail/config.yml
     networks:
