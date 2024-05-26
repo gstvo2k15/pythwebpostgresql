@@ -35,6 +35,9 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: postgres
+      SONAR_USER: sonarqube
+      SONAR_PASSWORD: sonarqube
+      SONAR_DB: sonarqube  
     ports:
       - "5432:5432"
     networks:
@@ -73,8 +76,8 @@ services:
     networks:
       - monitoring_net
     volumes:
-      - ./loki:/etc/loki        
-      - ./loki/loki-data:/loki:rw
+      - ./loki:/etc/loki:ro,z
+      - ./loki/loki-data:/loki:rw,z
     command: -config.file=/etc/loki/local-config.yaml
     container_name: loki  
 
@@ -156,17 +159,14 @@ services:
     restart: always
     container_name: kong
 
-  lint:
-    build:
-      context: .
-      dockerfile: Dockerfile.lint
-    networks:
-      - monitoring_net
-    container_name: lint
-    restart: "no"
+  code_checker:
+    build: .
     volumes:
-      - .:/app
-      - ./lint-reports:/app
+      - ./app:/app
+    ports:
+      - "5000:5000"
+    command: >
+      bash -c "python3 /app/app.py"      
 
   sonarqube:
     build:
@@ -176,34 +176,16 @@ services:
     networks:
       - monitoring_net
     restart: always
-    environment:
-      - sonar.jdbc.url=jdbc:postgresql://db:5432/sonarqube
-      - sonar.jdbc.username=sonar
-      - sonar.jdbc.password=sonar
-    healthcheck:
-      test: ["CMD-SHELL", "curl -f http://localhost:9000 || exit 1"]
-      interval: 30s
-      timeout: 10s
-      retries: 10
-      start_period: 60s
-    container_name: sonarqube
-
-  sonar-scanner:
-    image: sonarsource/sonar-scanner-cli:latest
-    networks:
-      - monitoring_net
-    container_name: sonar-scanner
-    depends_on:
-      sonarqube:
-        condition: service_healthy
-    environment:
-      - SONAR_HOST_URL=http://sonarqube:9000
-      - SONAR_LOGIN=m/klUDNemJHMhjfGjX1PTIH/FLuZcn+xAbNPQmHrOxA=
-    restart: "no"
     volumes:
-      - .:/usr/src
-      - ./sonar-scanner.properties:/usr/src/sonar-scanner.properties
-    command: "sonar-scanner -Dproject.settings=/usr/src/sonar-scanner.properties"
+      - ./sonarqube/sonarqube_data:/opt/sonarqube/data
+      - ./sonarqube/sonarqube_extensions:/opt/sonarqube/extensions
+      - ./sonarqube/sonarqube_logs:/opt/sonarqube/logs
+      - $PWD/app:/mnt/code
+    environment:
+      - SONARQUBE_JDBC_URL=jdbc:postgresql://db:5432/sonarqube
+      - SONARQUBE_JDBC_USERNAME=sonarqube
+      - SONARQUBE_JDBC_PASSWORD=sonarqube
+    container_name: sonarqube
       
 networks:
   monitoring_net:
