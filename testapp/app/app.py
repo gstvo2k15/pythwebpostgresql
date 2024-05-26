@@ -1,5 +1,6 @@
 import os
-from flask import Flask, jsonify, request
+import json
+from flask import Flask, jsonify, request, Response
 from flask_sqlalchemy import SQLAlchemy
 from prometheus_flask_exporter import PrometheusMetrics
 import subprocess
@@ -82,17 +83,21 @@ def report_code():
             text=True
         )
         report = {
-            'pylint_stdout': pylint_result.stdout,
-            'pylint_stderr': pylint_result.stderr,
-            'pylint_returncode': pylint_result.returncode,
-            'autopep8_stdout': autopep8_result.stdout,
-            'autopep8_stderr': autopep8_result.stderr,
-            'autopep8_returncode': autopep8_result.returncode
+            'pylint': {
+                'returncode': pylint_result.returncode,
+                'stdout': pylint_result.stdout.splitlines(),
+                'stderr': pylint_result.stderr.splitlines(),
+            },
+            'autopep8': {
+                'returncode': autopep8_result.returncode,
+                'stdout': autopep8_result.stdout.splitlines(),
+                'stderr': autopep8_result.stderr.splitlines(),
+            }
         }
-        return jsonify(report)
+        response = Response(json.dumps(report, indent=4), mimetype='application/json')
+        return response
     except subprocess.CalledProcessError as e:
         return jsonify(error=str(e)), 500
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
-
