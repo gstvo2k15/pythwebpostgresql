@@ -66,13 +66,33 @@ services:
     restart: always
     container_name: prometheus
 
+  loki:
+    image: grafana/loki:2.9.2
+    ports:
+      - "3100:3100"
+    networks:
+      - monitoring_net
+    command: -config.file=/etc/loki/local-config.yaml
+    container_name: loki  
+
+  promtail:
+    image: grafana/promtail:2.9.2
+    volumes:
+      - ./promtail-local-config.yaml:/etc/promtail/config.yaml:ro
+    command: -config.file=/etc/promtail/config.yaml
+    networks:
+      - monitoring_net
+    container_name: promtail    
+
   grafana:
     image: grafana/grafana:10.1.10
     volumes:
       - ./grafana/provisioning/:/etc/grafana/provisioning/
       - ./grafana/dashboards:/var/lib/grafana/dashboards
     environment:
-      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_PATHS_PROVISIONING=/etc/grafana/provisioning
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
     ports:
       - "3000:3000"
     networks:
@@ -117,9 +137,17 @@ services:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.4.0
     environment:
       - discovery.type=single-node
+      - bootstrap.memory_lock=true  
       - ES_JAVA_OPTS=-Xms512m -Xmx512m
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - $PWD/elastic/data01:/usr/share/elasticsearch/data
     ports:
       - "9200:9200"
+      - "9300:9300"  
     networks:
       - monitoring_net
     restart: always
@@ -144,6 +172,7 @@ services:
       - KAFKA_BROKER_ID=1
       - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
       - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092
+      - ALLOW_PLAINTEXT_LISTENER=yes
     ports:
       - "9092:9092"
     networks:
@@ -179,6 +208,56 @@ services:
     restart: always
     container_name: kong
 
+  lint:
+    build:
+      context: .
+      dockerfile: Dockerfile.lint
+    networks:
+      - monitoring_net
+    container_name: lint
+    restart: "no"
+    volumes:
+      - .:/app
+      - ./lint-reports:/app
+
+  sonarqube:
+    build:
+      context: ./sonarqube
+    ports:
+      - "9000:9000"
+    networks:
+      - monitoring_net
+    restart: always
+    environment:
+      - sonar.jdbc.url=jdbc:postgresql://db:5432/sonarqube
+      - sonar.jdbc.username=sonar
+      - sonar.jdbc.password=sonar
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:9000 || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 10
+      start_period: 60s
+    container_name: sonarqube
+
+  sonar-scanner:
+    #build:
+    # context: ./sonar-scanner
+    image: sonarsource/sonar-scanner-cli:latest
+    networks:
+      - monitoring_net
+    container_name: sonar-scanner
+    depends_on:
+      sonarqube:
+        condition: service_healthy
+    environment:
+      - SONAR_HOST_URL=http://sonarqube:9000
+      - SONAR_LOGIN=m/klUDNemJHMhjfGjX1PTIH/FLuZcn+xAbNPQmHrOxA=
+    restart: "no"
+    volumes:
+      - .:/usr/src
+      - ./sonar-scanner.properties:/usr/src/sonar-scanner.properties
+    command: "sonar-scanner -Dproject.settings=/usr/src/sonar-scanner.properties"
+      
 networks:
   monitoring_net:
-

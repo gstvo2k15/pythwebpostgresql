@@ -133,56 +133,6 @@ services:
     restart: always
     container_name: blackbox_exporter
 
-  elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:8.4.0
-    environment:
-      - discovery.type=single-node
-      - ES_JAVA_OPTS=-Xms512m -Xmx512m
-    ports:
-      - "9200:9200"
-    networks:
-      - monitoring_net
-    restart: always
-    container_name: elasticsearch
-
-  kibana:
-    image: docker.elastic.co/kibana/kibana:8.4.0
-    environment:
-      ELASTICSEARCH_HOSTS: 'http://elasticsearch:9200'
-    ports:
-      - "5601:5601"
-    depends_on:
-      - elasticsearch
-    networks:
-      - monitoring_net
-    restart: always
-    container_name: kibana
-
-  kafka:
-    image: bitnami/kafka:3.1.0
-    environment:
-      - KAFKA_BROKER_ID=1
-      - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
-      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092
-      - ALLOW_PLAINTEXT_LISTENER=yes
-    ports:
-      - "9092:9092"
-    networks:
-      - monitoring_net
-    restart: always
-    container_name: kafka
-
-  zookeeper:
-    image: bitnami/zookeeper:3.7.0
-    environment:
-      - ALLOW_ANONYMOUS_LOGIN=yes
-    ports:
-      - "2181:2181"
-    networks:
-      - monitoring_net
-    restart: always
-    container_name: zookeeper
-
   kong:
     image: kong:2.8
     environment:
@@ -233,8 +183,6 @@ services:
     container_name: sonarqube
 
   sonar-scanner:
-    #build:
-    # context: ./sonar-scanner
     image: sonarsource/sonar-scanner-cli:latest
     networks:
       - monitoring_net
