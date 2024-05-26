@@ -74,14 +74,17 @@ services:
       - monitoring_net
     volumes:
       - ./loki:/etc/loki        
+      - ./loki/loki-data:/loki:rw
     command: -config.file=/etc/loki/local-config.yaml
     container_name: loki  
 
   promtail:
     image: grafana/promtail:2.9.2
     volumes:
-      - ./promtail-local-config.yaml:/etc/promtail/config.yaml:ro
-    command: -config.file=/etc/promtail/config.yaml
+      - /var/log:/var/log
+      - /var/lib/docker/containers:/var/lib/docker/containers
+      - ./promtail/config.yml:/etc/promtail/config.yml
+    command: -config.file=/etc/promtail/config.yml
     networks:
       - monitoring_net
     container_name: promtail    
