@@ -7,14 +7,11 @@ app/module1.py:5:0: R0903: Too few public methods (1/2) (too-few-public-methods)
 app/module2.py:23:0: C0305: Trailing newlines (trailing-newlines)
 app/module2.py:5:0: R0903: Too few public methods (1/2) (too-few-public-methods)
 ************* Module app.app
-app/app.py:43:0: C0301: Line too long (110/100) (line-too-long)
-app/app.py:64:0: C0305: Trailing newlines (trailing-newlines)
-app/app.py:7:0: E0401: Unable to import 'flask' (import-error)
-app/app.py:8:0: E0401: Unable to import 'flask_sqlalchemy' (import-error)
-app/app.py:9:0: E0401: Unable to import 'prometheus_flask_exporter' (import-error)
-app/app.py:21:0: R0903: Too few public methods (1/2) (too-few-public-methods)
-app/app.py:52:11: W0718: Catching too general exception Exception (broad-exception-caught)
+app/app.py:98:0: C0304: Final newline missing (missing-final-newline)
+app/app.py:8:0: E0401: Unable to import 'flask' (import-error)
+app/app.py:9:0: E0401: Unable to import 'flask_sqlalchemy' (import-error)
+app/app.py:10:0: E0401: Unable to import 'prometheus_flask_exporter' (import-error)
 
 -----------------------------------
-Your code has been rated at 5.10/10
+Your code has been rated at 6.56/10
 
