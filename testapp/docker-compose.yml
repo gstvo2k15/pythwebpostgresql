@@ -53,6 +53,7 @@ services:
     depends_on:
       - app1
       - app2
+      - code_checker
     networks:
       - monitoring_net
     restart: always
@@ -160,13 +161,18 @@ services:
 
   code_checker:
     build:
-      context: ./pylint
+      context: .
+      dockerfile: Dockerfile.pylint
     volumes:
       - ./app:/app
     ports:
       - "5000:5000"
     command: >
-      bash -c "python3 /app/app.py"
+      sh -c "python3 /app/app.py"
+    networks:
+      - monitoring_net
+    container_name: code_checker
+   
 
   sonarqube:
     build:

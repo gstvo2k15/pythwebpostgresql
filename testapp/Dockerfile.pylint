@@ -6,17 +6,17 @@ ENV PYTHONUNBUFFERED=1
 
 # Instala dependencias necesarias
 RUN apk update && \
-    apk add --no-cache gcc musl-dev linux-headers git
+    apk add --no-cache gcc musl-dev linux-headers git postgresql-dev
 
-# Instala pylint, autopep8 y Flask
+# Instala versiones específicas de pylint, autopep8, Flask, Flask-SQLAlchemy y SQLAlchemy
 RUN pip install --upgrade pip && \
-    pip install pylint autopep8 Flask prometheus_flask_exporter
+    pip install pylint autopep8 Flask==2.0.3 Flask-SQLAlchemy==2.4.4 SQLAlchemy==1.3.24 psycopg2-binary Werkzeug==2.0.3 prometheus_flask_exporter
 
 # Crea el directorio de trabajo
 WORKDIR /app
 
 # Copia el contenido del directorio app al directorio de trabajo
-COPY ../app /app
+COPY ./app /app
 
 # Comando para ejecutar el servidor Flask
 CMD ["python3", "app.py"]

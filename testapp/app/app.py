@@ -1,27 +1,19 @@
-"""
-App Flask simple para registrar visitas de usuarios y
-exponer las métricas a Prometheus, además de servir un informe de código.
-"""
-
 import os
-import subprocess
-from flask import Flask, jsonify, request, send_file
+from flask import Flask, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
 from prometheus_flask_exporter import PrometheusMetrics
+import subprocess
 
 app = Flask(__name__)
 metrics = PrometheusMetrics(app)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get(
-    'DATABASE_URL',
-    'postgresql://postgres:postgres@db:5432/postgres'
+    'DATABASE_URL', 'postgresql://postgres:postgres@db:5432/postgres'
 )
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 
-
-# pylint: disable=too-few-public-methods
 class Visitor(db.Model):
     """
     Modelo de base de datos para registrar las visitas de los usuarios.
@@ -35,16 +27,12 @@ class Visitor(db.Model):
         return f'<Visitor {self.ip}>'
 
 
-# Desactivar chequeo no-member de pylint
-# pylint: disable=no-member
 @app.before_first_request
 def create_tables():
     """
     Crear las tablas de la base de datos antes de la primera solicitud.
     """
     db.create_all()
-# Volver a habilitar el chequeo no-member de pylint
-# pylint: enable=no-member
 
 
 @app.route('/')
@@ -53,15 +41,11 @@ def index():
     Registra la IP del visitante y retorna el número de visitantes únicos.
     """
     try:
-        ip = request.headers.get(
-            'X-Forwarded-For', request.remote_addr
-        ).split(',')[0].strip()
+        ip = request.headers.get('X-Forwarded-For', request.remote_addr).split(',')[0].strip()
         new_visitor = Visitor(ip=ip)
         db.session.add(new_visitor)
         db.session.commit()
-        unique_visitors = db.session.query(
-            db.func.count(db.distinct(Visitor.ip))
-        ).scalar()
+        unique_visitors = db.session.query(db.func.count(db.distinct(Visitor.ip))).scalar()
         return jsonify(unique_visitors=unique_visitors)
     except ValueError as ve:
         return jsonify(error=str(ve)), 400
@@ -82,17 +66,33 @@ def version():
 
 
 @app.route('/reportcode')
-def report():
+def report_code():
     """
-    Genera y sirve el informe de pylint.
+    Genera un reporte del código utilizando pylint y autopep8.
     """
-    # Ejecutar pylint y guardar el informe en un archivo
-    with open('pylint_report.txt', 'w', encoding='utf-8') as report_file:
-        subprocess.run(['pylint', 'app.py'], stdout=report_file, check=True)
-    return send_file('pylint_report.txt')
-
+    try:
+        pylint_result = subprocess.run(
+            ['pylint', 'app.py'],
+            capture_output=True,
+            text=True
+        )
+        autopep8_result = subprocess.run(
+            ['autopep8', 'app.py', '--diff'],
+            capture_output=True,
+            text=True
+        )
+        report = {
+            'pylint_stdout': pylint_result.stdout,
+            'pylint_stderr': pylint_result.stderr,
+            'pylint_returncode': pylint_result.returncode,
+            'autopep8_stdout': autopep8_result.stdout,
+            'autopep8_stderr': autopep8_result.stderr,
+            'autopep8_returncode': autopep8_result.returncode
+        }
+        return jsonify(report)
+    except subprocess.CalledProcessError as e:
+        return jsonify(error=str(e)), 500
 
 if __name__ == '__main__':
-    # Ejecutar autopep8 antes de iniciar la aplicación
-    subprocess.run(['autopep8', 'app.py', '--in-place'], check=True)
     app.run(host='0.0.0.0', port=5000)
+

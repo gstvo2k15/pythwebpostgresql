@@ -1,0 +1,18 @@
+************* Module app.app
+app.py:30:9: E1101: Instance of 'SQLAlchemy' has no 'Column' member (no-member)
+app.py:30:19: E1101: Instance of 'SQLAlchemy' has no 'Integer' member (no-member)
+app.py:31:9: E1101: Instance of 'SQLAlchemy' has no 'Column' member (no-member)
+app.py:31:19: E1101: Instance of 'SQLAlchemy' has no 'String' member (no-member)
+app.py:32:16: E1101: Instance of 'SQLAlchemy' has no 'Column' member (no-member)
+app.py:32:26: E1101: Instance of 'SQLAlchemy' has no 'DateTime' member (no-member)
+app.py:32:54: E1101: Instance of 'SQLAlchemy' has no 'func' member (no-member)
+app.py:60:8: E1101: Instance of 'scoped_session' has no 'add' member (no-member)
+app.py:61:8: E1101: Instance of 'scoped_session' has no 'commit' member (no-member)
+app.py:62:26: E1101: Instance of 'scoped_session' has no 'query' member (no-member)
+app.py:63:12: E1101: Instance of 'SQLAlchemy' has no 'func' member (no-member)
+app.py:63:26: E1101: Instance of 'SQLAlchemy' has no 'distinct' member (no-member)
+app.py:70:11: E1101: Instance of 'SQLAlchemy' has no 'exc' member (no-member)
+
+------------------------------------------------------------------
+Your code has been rated at 0.00/10 (previous run: 0.00/10, +0.00)
+
