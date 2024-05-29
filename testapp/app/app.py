@@ -72,16 +72,20 @@ def report_code():
     Genera un reporte del código utilizando pylint y autopep8.
     """
     try:
-        pylint_result = subprocess.run(
-            ['pylint', '--rcfile=/app/.pylintrc', 'app.py'],
-            capture_output=True,
-            text=True
-        )
+        # Ejecutar autopep8 para realizar cambios en el archivo y mostrar los detalles
         autopep8_result = subprocess.run(
-            ['autopep8', '--exit-code', 'app.py'],
+            ['autopep8', 'app/app.py', '-v', '-i'],
             capture_output=True,
             text=True
         )
+        
+        # Ejecutar pylint para verificar todos los archivos en el directorio app
+        pylint_result = subprocess.run(
+            ['pylint', '--rcfile=/app/.pylintrc', 'app'],
+            capture_output=True,
+            text=True
+        )
+        
         report = {
             'pylint': {
                 'returncode': pylint_result.returncode,
