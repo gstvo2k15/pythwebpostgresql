@@ -73,7 +73,7 @@ def report_code():
     """
     try:
         pylint_result = subprocess.run(
-            ['pylint', 'app.py'],
+            ['pylint', '--rcfile=/app/.pylintrc', 'app.py'],
             capture_output=True,
             text=True
         )
@@ -101,6 +101,8 @@ def report_code():
         return response
     except subprocess.CalledProcessError as e:
         return jsonify(error=str(e)), 500
+    except Exception as e:
+        return jsonify(error=f"Unexpected error: {str(e)}"), 500
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)

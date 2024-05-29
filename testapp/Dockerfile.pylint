@@ -18,6 +18,9 @@ WORKDIR /app
 # Copia el contenido del directorio app al directorio de trabajo
 COPY ./app /app
 
+# Copia el archivo .pylintrc al directorio de trabajo
+COPY .pylintrc /app/.pylintrc
+
 # Comando para ejecutar el servidor Flask
 CMD ["python3", "app.py"]
 
