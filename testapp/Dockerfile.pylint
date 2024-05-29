@@ -23,4 +23,3 @@ COPY .pylintrc /app/.pylintrc
 
 # Comando para ejecutar el servidor Flask
 CMD ["python3", "app.py"]
-
