@@ -94,7 +94,10 @@ def report_code():
                 'stderr': autopep8_result.stderr.splitlines(),
             }
         }
-        response = Response(json.dumps(report, indent=4), mimetype='application/json')
+        response = Response(
+            json.dumps(report, indent=4, sort_keys=True), 
+            mimetype='application/json'
+        )
         return response
     except subprocess.CalledProcessError as e:
         return jsonify(error=str(e)), 500
