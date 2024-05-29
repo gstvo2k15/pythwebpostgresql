@@ -21,5 +21,8 @@ COPY ./app /app
 # Copia el archivo .pylintrc al directorio de trabajo
 COPY .pylintrc /app/.pylintrc
 
+# Verificar que el archivo .pylintrc se haya copiado correctamente
+RUN ls -lahtr /app
+
 # Comando para ejecutar el servidor Flask
 CMD ["python3", "app.py"]

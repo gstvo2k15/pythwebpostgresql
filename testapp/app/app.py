@@ -78,7 +78,7 @@ def report_code():
             text=True
         )
         autopep8_result = subprocess.run(
-            ['autopep8', 'app.py', '--diff'],
+            ['autopep8', '--exit-code', 'app.py'],
             capture_output=True,
             text=True
         )
