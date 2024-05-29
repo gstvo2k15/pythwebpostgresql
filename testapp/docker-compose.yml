@@ -54,6 +54,9 @@ services:
       - app1
       - app2
       - code_checker
+    labels:
+      logging: "promtail"
+      logging_jobname: "containerlogs"      
     networks:
       - monitoring_net
     restart: always
@@ -85,11 +88,12 @@ services:
   promtail:
     image: grafana/promtail:2.9.2
     volumes:
-      #- /var/log:/var/log
-      #- /var/lib/docker/containers:/var/lib/docker/containers
-      #- /var/run/docker.sock:/var/run/docker.sock:ro
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+      - /var/run/docker.sock:/var/run/docker.sock
       - ./promtail/config.yml:/etc/promtail/config.yml
     command: -config.file=/etc/promtail/config.yml
+    depends_on:
+      - loki    
     networks:
       - monitoring_net
     container_name: promtail
