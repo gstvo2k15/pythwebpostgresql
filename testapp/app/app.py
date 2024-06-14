@@ -1,9 +1,13 @@
+"""
+Este es el módulo principal de la aplicación Flask.
+"""
+
+import subprocess
 import os
 import json
 from flask import Flask, jsonify, request, Response
 from flask_sqlalchemy import SQLAlchemy
 from prometheus_flask_exporter import PrometheusMetrics
-import subprocess
 
 app = Flask(__name__)
 metrics = PrometheusMetrics(app)
@@ -14,6 +18,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get(
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
+
 
 class Visitor(db.Model):
     """
@@ -28,12 +33,14 @@ class Visitor(db.Model):
         return f'<Visitor {self.ip}>'
 
 
+# pylint: disable=no-member
 @app.before_first_request
 def create_tables():
     """
     Crear las tablas de la base de datos antes de la primera solicitud.
     """
     db.create_all()
+# pylint: enable=no-member
 
 
 @app.route('/')
@@ -46,7 +53,9 @@ def index():
         new_visitor = Visitor(ip=ip)
         db.session.add(new_visitor)
         db.session.commit()
-        unique_visitors = db.session.query(db.func.count(db.distinct(Visitor.ip))).scalar()
+        unique_visitors = db.session.query(
+            db.func.count(db.distinct(Visitor.ip))
+        ).scalar()
         return jsonify(unique_visitors=unique_visitors)
     except ValueError as ve:
         return jsonify(error=str(ve)), 400
@@ -74,18 +83,20 @@ def report_code():
     try:
         # Ejecutar autopep8 para realizar cambios en el archivo y mostrar los detalles
         autopep8_result = subprocess.run(
-            ['autopep8', 'app/app.py', '-v', '-i'],
+            ['autopep8', '/app/app.py', '-v', '-i'],
             capture_output=True,
-            text=True
+            text=True,
+            check=True
         )
-        
+
         # Ejecutar pylint para verificar todos los archivos en el directorio app
         pylint_result = subprocess.run(
             ['pylint', '--rcfile=/app/.pylintrc', 'app'],
             capture_output=True,
-            text=True
+            text=True,
+            check=True
         )
-        
+
         report = {
             'pylint': {
                 'returncode': pylint_result.returncode,
@@ -99,14 +110,15 @@ def report_code():
             }
         }
         response = Response(
-            json.dumps(report, indent=4, sort_keys=True), 
+            json.dumps(report, indent=4, sort_keys=True),
             mimetype='application/json'
         )
         return response
     except subprocess.CalledProcessError as e:
         return jsonify(error=str(e)), 500
-    except Exception as e:
+    except Exception as e:  # pylint: disable=broad-exception-caught
         return jsonify(error=f"Unexpected error: {str(e)}"), 500
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
