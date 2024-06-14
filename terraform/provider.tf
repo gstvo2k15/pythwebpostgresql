@@ -1,18 +1,3 @@
-terraform {
-  required_providers {
-    azurerm = {
-      source  = "hashicorp/azurerm"
-      version = ">= 2.0"
-    }
-    kubernetes = {
-      source  = "hashicorp/kubernetes"
-      version = ">= 1.11"
-    }
-  }
-
-  required_version = ">= 0.14"
-}
-
 provider "azurerm" {
   features {}
 }
