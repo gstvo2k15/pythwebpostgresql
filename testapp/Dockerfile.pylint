@@ -22,7 +22,7 @@ COPY ./app /app
 COPY .pylintrc /app/.pylintrc
 
 # Copia el script de servidor HTTP al directorio de trabajo
-COPY server_report.py /app/server_report.py
+COPY ./app/server_report.py /app/server_report.py
 
 # Verificar que los archivos se hayan copiado correctamente
 RUN ls -lahtr /app

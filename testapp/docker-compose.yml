@@ -171,8 +171,6 @@ services:
       - ./app:/app
     ports:
       - "5003:5000"
-    command: >
-      sh -c "pylint --rcfile=/app/.pylintrc /app/app.py || true && python3 -m http.server 5000"
     networks:
       - monitoring_net
     container_name: code_checker

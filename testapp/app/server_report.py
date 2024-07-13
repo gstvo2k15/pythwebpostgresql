@@ -5,8 +5,14 @@ import os
 class CustomHandler(http.server.SimpleHTTPRequestHandler):
     def do_GET(self):
         if self.path == '/reportcode':
-            self.path = '/pylint_report.txt'
-        return http.server.SimpleHTTPRequestHandler.do_GET(self)
+            self.send_response(200)
+            self.send_header("Content-type", "text/plain")
+            self.end_headers()
+            with open("/app/pylint_report.txt", "r") as file:
+                self.wfile.write(file.read().encode())
+        else:
+            self.send_response(404)
+            self.end_headers()
 
 # Generate the pylint report
 os.system("pylint --rcfile=/app/.pylintrc /app/app.py > /app/pylint_report.txt || true")
