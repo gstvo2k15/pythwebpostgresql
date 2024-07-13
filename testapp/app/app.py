@@ -33,14 +33,12 @@ class Visitor(db.Model):
         return f'<Visitor {self.ip}>'
 
 
-# pylint: disable=no-member
 @app.before_first_request
 def create_tables():
     """
     Crear las tablas de la base de datos antes de la primera solicitud.
     """
     db.create_all()
-# pylint: enable=no-member
 
 
 @app.route('/')
@@ -49,14 +47,11 @@ def index():
     Registra la IP del visitante y retorna el número de visitantes únicos.
     """
     try:
-        ip = request.headers.get(
-            'X-Forwarded-For', request.remote_addr).split(',')[0].strip()
+        ip = request.headers.get('X-Forwarded-For', request.remote_addr).split(',')[0].strip()
         new_visitor = Visitor(ip=ip)
         db.session.add(new_visitor)
         db.session.commit()
-        unique_visitors = db.session.query(
-            db.func.count(db.distinct(Visitor.ip))
-        ).scalar()
+        unique_visitors = db.session.query(db.func.count(db.distinct(Visitor.ip))).scalar()
         return jsonify(unique_visitors=unique_visitors)
     except ValueError as ve:
         return jsonify(error=str(ve)), 400
@@ -64,7 +59,7 @@ def index():
         return jsonify(error=str(te)), 400
     except db.exc.SQLAlchemyError as se:
         return jsonify(error=str(se)), 500
-    except Exception as e:  # pylint: disable=broad-exception-caught
+    except Exception as e:
         return jsonify(error=str(e)), 500
 
 
@@ -117,7 +112,7 @@ def report_code():
         return response
     except subprocess.CalledProcessError as e:
         return jsonify(error=str(e)), 500
-    except Exception as e:  # pylint: disable=broad-exception-caught
+    except Exception as e:
         return jsonify(error=f"Unexpected error: {str(e)}"), 500
 
 
