@@ -49,7 +49,8 @@ def index():
     Registra la IP del visitante y retorna el número de visitantes únicos.
     """
     try:
-        ip = request.headers.get('X-Forwarded-For', request.remote_addr).split(',')[0].strip()
+        ip = request.headers.get(
+            'X-Forwarded-For', request.remote_addr).split(',')[0].strip()
         new_visitor = Visitor(ip=ip)
         db.session.add(new_visitor)
         db.session.commit()
