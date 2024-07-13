@@ -53,13 +53,11 @@ def index():
         db.session.commit()
         unique_visitors = db.session.query(db.func.count(db.distinct(Visitor.ip))).scalar()
         return jsonify(unique_visitors=unique_visitors)
-    except ValueError as ve:
-        return jsonify(error=str(ve)), 400
-    except TypeError as te:
-        return jsonify(error=str(te)), 400
+    except (ValueError, TypeError) as e:
+        return jsonify(error=str(e)), 400
     except db.exc.SQLAlchemyError as se:
         return jsonify(error=str(se)), 500
-    except Exception as e:
+    except Exception as e:  # pylint: disable=broad-exception-caught
         return jsonify(error=str(e)), 500
 
 
@@ -112,7 +110,7 @@ def report_code():
         return response
     except subprocess.CalledProcessError as e:
         return jsonify(error=str(e)), 500
-    except Exception as e:
+    except Exception as e:  # pylint: disable=broad-exception-caught
         return jsonify(error=f"Unexpected error: {str(e)}"), 500
 
 
