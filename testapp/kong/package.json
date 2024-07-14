@@ -1,0 +1,20 @@
+{
+  "name": "konga",
+  "version": "0.14.9",
+  "description": "More than just another GUI to Kong Admin API",
+  "main": "app.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "sails": "^1.4.3",
+    "sails-hook-orm": "^3.0.1",
+    "sails-mongo": "^1.2.0",
+    "connect-mongo": "^4.6.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.12"
+  }
+}
+

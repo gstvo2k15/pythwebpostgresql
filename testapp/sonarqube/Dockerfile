@@ -31,5 +31,5 @@ COPY start-sonarqube.sh /opt/sonarqube/start-sonarqube.sh
 RUN chmod +x /opt/sonarqube/start-sonarqube.sh
 
 # Definir el punto de entrada
-ENTRYPOINT ["/opt/sonarqube/start-sonarqube.sh"]
+ENTRYPOINT ["/opt/sonarqube/start-sonarqube.sh", "/opt/sonarqube/bin/linux-x86-64/sonar.sh", "console"]
 

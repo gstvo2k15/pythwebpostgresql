@@ -11,5 +11,5 @@ COPY wait-for-it.sh /wait-for-it.sh
 RUN chmod +x /wait-for-it.sh
 
 # Comando para ejecutar el script de espera y luego iniciar Nginx
-CMD ["/wait-for-it.sh", "code_checker", "nginx", "-g", "daemon off;"]
+CMD ["/wait-for-it.sh", "code_checker:5000", "--", "nginx", "-g", "daemon off;"]
 

@@ -19,10 +19,7 @@ WORKDIR /app
 COPY ./app /app
 
 # Copia el archivo .pylintrc al directorio de trabajo
-COPY .pylintrc /app/.pylintrc
-
-# Copia el script de servidor HTTP al directorio de trabajo
-COPY ./app/server_report.py /app/server_report.py
+COPY ./code_checker/.pylintrc /app/.pylintrc
 
 # Verificar que los archivos se hayan copiado correctamente
 RUN ls -lahtr /app

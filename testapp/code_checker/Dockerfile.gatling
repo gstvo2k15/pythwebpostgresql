@@ -1,0 +1,8 @@
+FROM denvazh/gatling:3.5.1
+
+COPY gatling-script.scala /opt/gatling/user-files/simulations/BasicSimulation.scala
+
+RUN mkdir -p /usr/share/nginx/html/gatling
+
+ENTRYPOINT ["/opt/gatling/bin/gatling.sh", "-s", "BasicSimulation", "-rf", "/usr/share/nginx/html/gatling"]
+

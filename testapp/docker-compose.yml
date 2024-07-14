@@ -38,6 +38,9 @@ services:
       SONAR_USER: sonarqube
       SONAR_PASSWORD: sonarqube
       SONAR_DB: sonarqube
+      KONG_USER: kong
+      KONG_PASSWORD: kong
+      KONG_DB: kong
     ports:
       - "5432:5432"
     networks:
@@ -57,11 +60,15 @@ services:
     labels:
       logging: "promtail"
       logging_jobname: "containerlogs"      
+    #volumes:
+      #- /var/log/nginx:/var/log/nginx:ro
     networks:
       - monitoring_net
     restart: always
     container_name: nginx
 
+
+### Monitoring section
   prometheus:
     image: prom/prometheus:v2.52.0
     volumes:
@@ -146,36 +153,70 @@ services:
       - monitoring_net
     container_name: blackbox_exporter
 
+
+### API gateway
   kong:
-    image: kong:2.8
+    build:
+      context: ./kong
+      dockerfile: Dockerfile.kong
+    depends_on:
+      - db
     environment:
-      KONG_DATABASE: "off"
-      KONG_DECLARATIVE_CONFIG: "/usr/local/kong/declarative/kong.yml"
-    volumes:
-      - ./kong/kong.yml:/usr/local/kong/declarative/kong.yml
+      KONG_DATABASE: postgres
+      KONG_PG_HOST: db
+      KONG_PG_PASSWORD: kong
+      KONG_PG_USER: kong
+      KONG_PG_DATABASE: kong
+      KONG_CASSANDRA_CONTACT_POINTS: db
+      KONG_PROXY_ACCESS_LOG: /dev/stdout
+      KONG_ADMIN_ACCESS_LOG: /dev/stdout
+      KONG_PROXY_ERROR_LOG: /dev/stderr
+      KONG_ADMIN_ERROR_LOG: /dev/stderr
+      KONG_ADMIN_LISTEN: 0.0.0.0:8001
+      KONG_PROXY_LISTEN: 0.0.0.0:8000
+    networks:
+      - monitoring_net
     ports:
       - "8000:8000"
       - "8443:8443"
       - "8001:8001"
       - "8444:8444"
-    networks:
-      - monitoring_net
-    restart: always
     container_name: kong
 
+  konga:
+    build:
+      context: ./kong
+      dockerfile: Dockerfile.konga
+    depends_on:
+      - kong
+    environment:
+      NODE_ENV: production
+      KONGA_DB_ADAPTER: postgres
+      KONGA_DB_URI: postgres://kong:kong@kong-db:5432/konga_db
+      KONGA_HOOK_TIMEOUT: 120000
+      TOKEN_SECRET: somerandomstring
+    networks:
+      - monitoring_net
+    ports:
+      - "1337:1337"
+    container_name: konga
+
+
+### Testing and validate our code
   code_checker:
     build:
       context: .
-      dockerfile: Dockerfile.pylint
+      dockerfile: code_checker/Dockerfile.pylint
     volumes:
       - ./app:/app
+      - ./code_checker/.pylintrc:/app/.pylintrc
+      - ./code_checker/test_script.sh:/app/test_script.sh      
     ports:
       - "5003:5000"
     networks:
       - monitoring_net
     container_name: code_checker
    
-
   sonarqube:
     build:
       context: ./sonarqube
@@ -194,6 +235,50 @@ services:
       - SONARQUBE_JDBC_USERNAME=sonarqube
       - SONARQUBE_JDBC_PASSWORD=sonarqube
     container_name: sonarqube
+
+  flake8_checker:
+    build:
+      context: .
+      dockerfile: code_checker/Dockerfile.flake8
+    volumes:
+      - ./app:/app
+    networks:
+      - monitoring_net
+    container_name: flake8_checker
+
+  hadolint:
+    build:
+      context: ./code_checker
+      dockerfile: Dockerfile.hadolint
+    volumes:
+      - ./Dockerfile:/code_checker/Dockerfile:ro
+    networks:
+      - monitoring_net
+    container_name: hadolint
+
+  dockle:
+    image: goodwithtech/dockle:v0.4.6
+    #build:
+      #context: ./code_checker
+      #dockerfile: Dockerfile.dockle
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - monitoring_net
+    container_name: dockle
+
+  wiremock:
+    build:
+      context: ./code_checker
+      dockerfile: Dockerfile.wiremock
+    volumes:
+      - ./code_checker/mappings:/home/wiremock/mappings
+      - ./code_checker/__files:/home/wiremock/__files
+    networks:
+      - monitoring_net
+    container_name: wiremock
+    ports:
+      - "8090:8090"
 
 networks:
   monitoring_net:

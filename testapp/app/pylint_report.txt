@@ -1,4 +1,9 @@
+************* Module /app/.pylintrc
+.pylintrc:1:0: W0012: Unknown option value for '--disable', expected a valid pylint message and got 'E1101
+no-member' (unknown-option-value)
+************* Module app.app
+app.py:7:0: C0305: Trailing newlines (trailing-newlines)
 
-------------------------------------
-Your code has been rated at 10.00/10
+-----------------------------------
+Your code has been rated at 7.50/10
 

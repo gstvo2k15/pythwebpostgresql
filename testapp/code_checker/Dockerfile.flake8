@@ -1,0 +1,14 @@
+FROM python:3.9-alpine
+
+# Instala Flake8
+RUN pip install flake8
+
+# Crea el directorio de trabajo
+WORKDIR /app
+
+# Copia el contenido del directorio app al directorio de trabajo
+COPY ../app /app
+
+# Comando para ejecutar Flake8
+CMD ["flake8", "--max-line-length=100", "."]
+

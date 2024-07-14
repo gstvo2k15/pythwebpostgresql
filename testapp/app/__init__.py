@@ -1,9 +1,20 @@
-"""
-Este módulo inicializa la aplicación y exporta las clases y funciones de module1 y module2.
-"""
+from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
 
-from .module1 import SomeClass, some_function
-from .module2 import AnotherClass, another_function
+db = SQLAlchemy()
 
-__all__ = ['SomeClass', 'some_function', 'AnotherClass', 'another_function']
+def create_app():
+    app = Flask(__name__)
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:postgres@db:5432/postgres'
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+    db.init_app(app)
+
+    with app.app_context():
+        from .api import routes
+        app.register_blueprint(routes.bp)
+
+        db.create_all()
+
+    return app
 

@@ -1,0 +1,7 @@
+FROM kong:latest
+
+COPY kong-entrypoint.sh /usr/local/bin/
+COPY kong.yml /kong/kong.yml
+
+ENTRYPOINT ["/usr/local/bin/kong-entrypoint.sh"]
+

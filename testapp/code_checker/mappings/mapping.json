@@ -1,0 +1,14 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "/api/version"
+  },
+  "response": {
+    "status": 200,
+    "body": "{\"version\": \"mocked-version\"}",
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}
+
