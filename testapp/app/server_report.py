@@ -15,6 +15,7 @@ class CustomHandler(http.server.SimpleHTTPRequestHandler):
             self.end_headers()
 
 # Generate the pylint report
+os.system("autopep8 --in-place --aggressive --aggressive /app/app.py")
 os.system("pylint --rcfile=/app/.pylintrc /app/app.py > /app/pylint_report.txt || true")
 
 # Serve the pylint report
@@ -22,4 +23,3 @@ PORT = 5000
 with socketserver.TCPServer(("", PORT), CustomHandler) as httpd:
     print("Serving HTTP on port", PORT)
     httpd.serve_forever()
-
