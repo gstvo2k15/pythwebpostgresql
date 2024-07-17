@@ -1,7 +1,7 @@
 FROM denvazh/gatling:latest
 
 # Exponer el puerto para el acceso a los resultados de Gatling
-EXPOSE 8080
+EXPOSE 8095
 
 # Copiar los archivos de configuración de Gatling
 COPY gatling.conf /opt/gatling/conf/gatling.conf

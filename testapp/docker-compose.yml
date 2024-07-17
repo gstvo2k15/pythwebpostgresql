@@ -251,8 +251,8 @@ services:
     build:
       context: ./code_checker
       dockerfile: Dockerfile.hadolint
-    volumes:
-      - ./Dockerfile:/code_checker/Dockerfile:ro
+    #volumes:
+      #- ./Dockerfile:/code_checker/Dockerfile:ro
     networks:
       - monitoring_net
     container_name: hadolint
@@ -292,10 +292,16 @@ services:
     depends_on:
       - nginx
     ports:
-      - "8080:8080"
+      - "8095:8095"
     networks:
       - monitoring_net
     container_name: gatling
+    deploy:
+      resources:
+        limits:
+          memory: 2G
+        reservations:
+          memory: 1G
 
 networks:
   monitoring_net:
