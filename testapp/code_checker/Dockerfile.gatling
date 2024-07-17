@@ -1,8 +1,8 @@
-FROM denvazh/gatling:3.5.1
+FROM denvazh/gatling:latest
 
-COPY gatling-script.scala /opt/gatling/user-files/simulations/BasicSimulation.scala
+# Exponer el puerto para el acceso a los resultados de Gatling
+EXPOSE 8080
 
-RUN mkdir -p /usr/share/nginx/html/gatling
-
-ENTRYPOINT ["/opt/gatling/bin/gatling.sh", "-s", "BasicSimulation", "-rf", "/usr/share/nginx/html/gatling"]
+# Copiar los archivos de configuración de Gatling
+COPY gatling.conf /opt/gatling/conf/gatling.conf
 

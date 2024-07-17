@@ -220,6 +220,7 @@ services:
   sonarqube:
     build:
       context: ./sonarqube
+      dockerfile: Dockerfile.sonarqube
     ports:
       - "9000:9000"
     networks:
@@ -257,14 +258,16 @@ services:
     container_name: hadolint
 
   dockle:
-    image: goodwithtech/dockle:v0.4.6
-    #build:
-      #context: ./code_checker
-      #dockerfile: Dockerfile.dockle
+    #image: goodwithtech/dockle:v0.4.6
+    build:
+      context: ./code_checker
+      dockerfile: Dockerfile.dockle
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     networks:
       - monitoring_net
+    #command: dockle --input ./code_checker/Dockerfile.wiremock
+    command: dockle --exit-code 1 --input ./code_checker/Dockerfile.wiremock  
     container_name: dockle
 
   wiremock:
@@ -279,6 +282,20 @@ services:
     container_name: wiremock
     ports:
       - "8090:8090"
+
+  gatling:
+    build:
+      context: ./code_checker
+      dockerfile: Dockerfile.gatling
+    volumes:
+      - ./nginx/gatling:/usr/share/nginx/html/gatling
+    depends_on:
+      - nginx
+    ports:
+      - "8080:8080"
+    networks:
+      - monitoring_net
+    container_name: gatling
 
 networks:
   monitoring_net:

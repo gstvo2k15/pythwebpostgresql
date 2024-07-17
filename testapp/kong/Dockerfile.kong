@@ -1,7 +1,26 @@
-FROM kong:latest
+FROM alpine:3.14 as builder
 
-COPY kong-entrypoint.sh /usr/local/bin/
-COPY kong.yml /kong/kong.yml
+# Instalar netcat en la imagen de alpine
+RUN apk update && apk add --no-cache netcat-openbsd
+RUN apk add netcat-openbsd
+
+FROM kong:2.8
+
+# Copiar netcat desde la imagen de builder
+#COPY --from=builder /bin/nc /bin/nc
+
+# Configuración de la base de datos
+COPY kong-entrypoint.sh /usr/local/bin/kong-entrypoint.sh
+#RUN chmod +x /usr/local/bin/kong-entrypoint.sh
+
+# Variables de entorno
+ENV KONG_DATABASE=postgres \
+    KONG_PG_HOST=db \
+    KONG_PG_USER=kong \
+    KONG_PG_PASSWORD=kong \
+    KONG_PG_DATABASE=kong
+
+EXPOSE 8000 8443 8001 8444
 
 ENTRYPOINT ["/usr/local/bin/kong-entrypoint.sh"]
 
