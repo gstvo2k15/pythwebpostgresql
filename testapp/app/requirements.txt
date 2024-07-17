@@ -4,3 +4,5 @@ psycopg2-binary==2.9.3
 Werkzeug==2.2.3
 SQLAlchemy==1.4.46
 prometheus-flask-exporter==0.23.0
+autopep8==1.5.7
+pylint==2.9.3
