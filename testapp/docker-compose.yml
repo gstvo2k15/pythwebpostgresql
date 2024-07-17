@@ -62,8 +62,6 @@ services:
     labels:
       logging: "promtail"
       logging_jobname: "containerlogs"      
-    #volumes:
-      #- /var/log/nginx:/var/log/nginx:ro
     networks:
       - monitoring_net
     restart: always
@@ -88,10 +86,9 @@ services:
       - "3100:3100"
     networks:
       - monitoring_net
-    #volumes:
-    #  - ./loki:/etc/loki:ro,z
-    #  - ./loki/loki-data:/loki:rw,z
-    command: -config.file=/etc/loki/local-config.yaml
+    command: -config.file=/etc/loki/local-config.yam
+    volumes:
+      - ./grafana/grafana.ini:/etc/grafana/grafana.ini
     container_name: loki
 
   promtail:
@@ -219,48 +216,48 @@ services:
       - monitoring_net
     container_name: code_checker
    
-  sonarqube:
-    build:
-      context: ./sonarqube
-      dockerfile: Dockerfile.sonarqube
-    ports:
-      - "9000:9000"
-    networks:
-      - monitoring_net
-    restart: always
-    volumes:
-      - ./sonarqube/sonarqube_data:/opt/sonarqube/data
-      - ./sonarqube/sonarqube_extensions:/opt/sonarqube/extensions
-      - ./sonarqube/sonarqube_logs:/opt/sonarqube/logs
-      - $PWD/app:/mnt/code
-    environment:
-      - SONARQUBE_JDBC_URL=jdbc:postgresql://db:5432/sonarqube
-      - SONARQUBE_JDBC_USERNAME=sonarqube
-      - SONARQUBE_JDBC_PASSWORD=sonarqube
-    container_name: sonarqube
-
-  flake8_checker:
-    build:
-      context: .
-      dockerfile: code_checker/Dockerfile.flake8
-    volumes:
-      - ./app:/app
-    networks:
-      - monitoring_net
-    container_name: flake8_checker
-
-  wiremock:
-    build:
-      context: ./code_checker
-      dockerfile: Dockerfile.wiremock
-    volumes:
-      - ./code_checker/mappings:/home/wiremock/mappings
-      - ./code_checker/__files:/home/wiremock/__files
-    networks:
-      - monitoring_net
-    container_name: wiremock
-    ports:
-      - "8090:8090"
+#  sonarqube:
+#    build:
+#      context: ./sonarqube
+#      dockerfile: Dockerfile.sonarqube
+#    ports:
+#      - "9000:9000"
+#    networks:
+#      - monitoring_net
+#    restart: always
+#    volumes:
+#      - ./sonarqube/sonarqube_data:/opt/sonarqube/data
+#      - ./sonarqube/sonarqube_extensions:/opt/sonarqube/extensions
+#      - ./sonarqube/sonarqube_logs:/opt/sonarqube/logs
+#      - $PWD/app:/mnt/code
+#    environment:
+#      - SONARQUBE_JDBC_URL=jdbc:postgresql://db:5432/sonarqube
+#      - SONARQUBE_JDBC_USERNAME=sonarqube
+#      - SONARQUBE_JDBC_PASSWORD=sonarqube
+#    container_name: sonarqube
+#
+#  flake8_checker:
+#    build:
+#      context: .
+#      dockerfile: code_checker/Dockerfile.flake8
+#    volumes:
+#      - ./app:/app
+#    networks:
+#      - monitoring_net
+#    container_name: flake8_checker
+#
+#  wiremock:
+#    build:
+#      context: ./code_checker
+#      dockerfile: Dockerfile.wiremock
+#    volumes:
+#      - ./code_checker/mappings:/home/wiremock/mappings
+#      - ./code_checker/__files:/home/wiremock/__files
+#    networks:
+#      - monitoring_net
+#    container_name: wiremock
+#    ports:
+#      - "8090:8090"
 
 
 networks:
