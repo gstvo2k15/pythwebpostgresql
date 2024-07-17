@@ -86,9 +86,7 @@ services:
       - "3100:3100"
     networks:
       - monitoring_net
-    command: -config.file=/etc/loki/local-config.yam
-    volumes:
-      - ./grafana/grafana.ini:/etc/grafana/grafana.ini
+    command: -config.file=/etc/loki/local-config.yaml
     container_name: loki
 
   promtail:
@@ -113,6 +111,8 @@ services:
       - GF_PATHS_PROVISIONING=/etc/grafana/provisioning
       - GF_AUTH_ANONYMOUS_ENABLED=true
       - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+    volumes:
+    - ./grafana/grafana.ini:/etc/grafana/grafana.ini      
     ports:
       - "3000:3000"
     networks:
