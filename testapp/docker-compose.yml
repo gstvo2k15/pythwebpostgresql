@@ -79,9 +79,6 @@ services:
       - "3100:3100"
     networks:
       - monitoring_net
-    #volumes:
-    #  - ./loki:/etc/loki:ro,z
-    #  - ./loki/loki-data:/loki:rw,z
     command: -config.file=/etc/loki/local-config.yaml
     container_name: loki
 
@@ -145,23 +142,6 @@ services:
     networks:
       - monitoring_net
     container_name: blackbox_exporter
-
-  kong:
-    image: kong:2.8
-    environment:
-      KONG_DATABASE: "off"
-      KONG_DECLARATIVE_CONFIG: "/usr/local/kong/declarative/kong.yml"
-    volumes:
-      - ./kong/kong.yml:/usr/local/kong/declarative/kong.yml
-    ports:
-      - "8000:8000"
-      - "8443:8443"
-      - "8001:8001"
-      - "8444:8444"
-    networks:
-      - monitoring_net
-    restart: always
-    container_name: kong
 
   code_checker:
     build:
