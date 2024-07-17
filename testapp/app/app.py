@@ -83,7 +83,7 @@ def report_code():
     try:
         # Ejecutar autopep8 para realizar cambios en el archivo y mostrar los detalles
         autopep8_result = subprocess.run(
-            ['autopep8', '/app/app.py', '-v', '-i'],
+            ['autopep8', '/app/app.py', '-v'],
             capture_output=True,
             text=True,
             check=True
