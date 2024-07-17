@@ -249,32 +249,6 @@ services:
       - monitoring_net
     container_name: flake8_checker
 
-  hadolint:
-    image: goodwithtech/dockle:v0.4.6
-    #build:
-      #context: ./code_checker
-      #dockerfile: Dockerfile.hadolint
-    #volumes:
-      #- ./Dockerfile:/code_checker/Dockerfile:ro
-    networks:
-      - monitoring_net
-    volumes:
-      - ./code_checker:/code_checker
-    container_name: hadolint
-
-  dockle:
-    #image: goodwithtech/dockle:v0.4.6
-    build:
-      context: ./code_checker
-      dockerfile: Dockerfile.dockle
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-    networks:
-      - monitoring_net
-    #command: dockle --input ./code_checker/Dockerfile.wiremock
-    command: dockle --exit-code 1 --input ./code_checker/Dockerfile.wiremock  
-    container_name: dockle
-
   wiremock:
     build:
       context: ./code_checker
@@ -288,25 +262,6 @@ services:
     ports:
       - "8090:8090"
 
-  gatling:
-    build:
-      context: ./code_checker
-      dockerfile: Dockerfile.gatling
-    volumes:
-      - ./nginx/gatling:/usr/share/nginx/html/gatling
-    depends_on:
-      - nginx
-    ports:
-      - "8095:8095"
-    networks:
-      - monitoring_net
-    container_name: gatling
-    deploy:
-      resources:
-        limits:
-          memory: 2G
-        reservations:
-          memory: 1G
 
 networks:
   monitoring_net:
