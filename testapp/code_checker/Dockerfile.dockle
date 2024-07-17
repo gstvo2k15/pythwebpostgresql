@@ -1,8 +1,0 @@
-FROM goodwithtech/dockle
-
-# Crea el directorio de trabajo
-WORKDIR /code_checker
-
-# Comando para ejecutar Dockle
-CMD ["dockle", "myapp:latest"]
-
