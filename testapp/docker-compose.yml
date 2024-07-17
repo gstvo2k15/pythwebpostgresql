@@ -56,7 +56,7 @@ services:
       - code_checker
     labels:
       logging: "promtail"
-      logging_jobname: "containerlogs"      
+      logging_jobname: "containerlogs"
     networks:
       - monitoring_net
     restart: always
@@ -90,7 +90,7 @@ services:
       - ./promtail/config.yml:/etc/promtail/config.yml
     command: -config.file=/etc/promtail/config.yml
     depends_on:
-      - loki    
+      - loki
     networks:
       - monitoring_net
     container_name: promtail
@@ -151,12 +151,9 @@ services:
       - ./app:/app
     ports:
       - "5000:5000"
-    command: >
-      sh -c "python3 /app/app.py"
     networks:
       - monitoring_net
     container_name: code_checker
-   
+
 networks:
   monitoring_net:
-

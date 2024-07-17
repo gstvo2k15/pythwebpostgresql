@@ -49,7 +49,8 @@ def index():
     Registra la IP del visitante y retorna el número de visitantes únicos.
     """
     try:
-        ip = request.headers.get('X-Forwarded-For', request.remote_addr).split(',')[0].strip()
+        ip = request.headers.get(
+            'X-Forwarded-For', request.remote_addr).split(',')[0].strip()
         new_visitor = Visitor(ip=ip)
         db.session.add(new_visitor)
         db.session.commit()
@@ -83,7 +84,7 @@ def report_code():
     try:
         # Ejecutar autopep8 para realizar cambios en el archivo y mostrar los detalles
         autopep8_result = subprocess.run(
-            ['autopep8', '/app/app.py', '-v'],
+            ['autopep8', '--diff', '/app/app.py'],
             capture_output=True,
             text=True,
             check=True
