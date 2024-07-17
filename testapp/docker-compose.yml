@@ -47,6 +47,8 @@ services:
       - monitoring_net
     restart: always
     container_name: db
+    volumes:
+      - ./db/init-db.sh:/docker-entrypoint-initdb.d/init-db.sh      
 
   nginx:
     build:
@@ -248,9 +250,10 @@ services:
     container_name: flake8_checker
 
   hadolint:
-    build:
-      context: ./code_checker
-      dockerfile: Dockerfile.hadolint
+    image: goodwithtech/dockle:v0.4.6
+    #build:
+      #context: ./code_checker
+      #dockerfile: Dockerfile.hadolint
     #volumes:
       #- ./Dockerfile:/code_checker/Dockerfile:ro
     networks:

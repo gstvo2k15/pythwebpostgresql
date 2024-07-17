@@ -11,6 +11,8 @@ FROM kong:2.8
 
 # Configuración de la base de datos
 COPY kong-entrypoint.sh /usr/local/bin/kong-entrypoint.sh
+COPY kong.yml /kong/kong.yml
+
 #RUN chmod +x /usr/local/bin/kong-entrypoint.sh
 
 # Variables de entorno
