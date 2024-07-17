@@ -177,26 +177,6 @@ services:
       - monitoring_net
     container_name: code_checker
    
-
-  sonarqube:
-    build:
-      context: ./sonarqube
-    ports:
-      - "9000:9000"
-    networks:
-      - monitoring_net
-    restart: always
-    volumes:
-      - ./sonarqube/sonarqube_data:/opt/sonarqube/data
-      - ./sonarqube/sonarqube_extensions:/opt/sonarqube/extensions
-      - ./sonarqube/sonarqube_logs:/opt/sonarqube/logs
-      - $PWD/app:/mnt/code
-    environment:
-      - SONARQUBE_JDBC_URL=jdbc:postgresql://db:5432/sonarqube
-      - SONARQUBE_JDBC_USERNAME=sonarqube
-      - SONARQUBE_JDBC_PASSWORD=sonarqube
-    container_name: sonarqube
-
 networks:
   monitoring_net:
 
