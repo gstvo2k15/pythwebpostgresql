@@ -255,6 +255,8 @@ services:
       #- ./Dockerfile:/code_checker/Dockerfile:ro
     networks:
       - monitoring_net
+    volumes:
+      - ./code_checker:/code_checker
     container_name: hadolint
 
   dockle:
