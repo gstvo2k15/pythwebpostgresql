@@ -13,12 +13,6 @@ RUN chmod +x /wait-for-it.sh
 # Instala nc (netcat)
 RUN apk --no-cache add netcat-openbsd
 
-# Crear directorios para logs y asegurar permisos
-RUN mkdir -p /var/log/nginx && \
-    chmod -R 755 /var/log/nginx && \
-    touch /var/log/nginx/access.log /var/log/nginx/error.log && \
-    chmod 666 /var/log/nginx/*.log
-
 # Comando para ejecutar el script de espera y luego iniciar Nginx
 CMD ["/wait-for-it.sh", "code_checker", "nginx", "-g", "daemon off;"]
 
