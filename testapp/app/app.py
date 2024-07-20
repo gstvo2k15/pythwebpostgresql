@@ -1,7 +1,3 @@
-"""
-Este es el módulo principal de la aplicación Flask.
-"""
-
 import subprocess
 import os
 import json
@@ -19,7 +15,6 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 
-# pylint: disable=no-member
 
 class Visitor(db.Model):
     """
@@ -33,7 +28,6 @@ class Visitor(db.Model):
     def __repr__(self):
         return f'<Visitor {self.ip}>'
 
-# pylint: enable=no-member
 
 @app.before_first_request
 def create_tables():
@@ -41,7 +35,6 @@ def create_tables():
     Crear las tablas de la base de datos antes de la primera solicitud.
     """
     db.create_all()
-# pylint: enable=no-member
 
 
 @app.route('/')
@@ -53,17 +46,17 @@ def index():
         ip = request.headers.get(
             'X-Forwarded-For', request.remote_addr).split(',')[0].strip()
         new_visitor = Visitor(ip=ip)
-        db.session.add(new_visitor)
-        db.session.commit()
+        db.session.add(new_visitor)  # pylint: disable=no-member
+        db.session.commit()  # pylint: disable=no-member
         unique_visitors = db.session.query(
             db.func.count(db.distinct(Visitor.ip))
-        ).scalar()
+        ).scalar()  # pylint: disable=no-member
         return jsonify(unique_visitors=unique_visitors)
     except ValueError as ve:
         return jsonify(error=str(ve)), 400
     except TypeError as te:
         return jsonify(error=str(te)), 400
-    except db.exc.SQLAlchemyError as se:
+    except db.exc.SQLAlchemyError as se:  # pylint: disable=no-member
         return jsonify(error=str(se)), 500
     except Exception as e:  # pylint: disable=broad-exception-caught
         return jsonify(error=str(e)), 500
@@ -117,7 +110,7 @@ def report_code():
         )
         return response
     except subprocess.CalledProcessError as e:
-        return jsonify(error=str(e)), 500
+        return jsonify(error=str(e), output=e.output, stdout=e.stdout, stderr=e.stderr), 500
     except Exception as e:  # pylint: disable=broad-exception-caught
         return jsonify(error=f"Unexpected error: {str(e)}"), 500
 
