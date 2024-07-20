@@ -54,9 +54,11 @@ services:
       - app1
       - app2
       - code_checker
+    volumes:
+      - ./nginx/logs:/var/log/nginx      
     labels:
       logging: "promtail"
-      logging_jobname: "containerlogs"
+      logging_jobname: "nginx_logs"
     networks:
       - monitoring_net
     restart: always
@@ -79,6 +81,8 @@ services:
       - "3100:3100"
     networks:
       - monitoring_net
+    volumes:
+      - ./loki/local-config.yaml:/etc/loki/local-config.yaml      
     command: -config.file=/etc/loki/local-config.yaml
     container_name: loki
 
