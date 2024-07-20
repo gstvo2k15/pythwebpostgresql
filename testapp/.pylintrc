@@ -1,5 +1,6 @@
 [MASTER]
 ignore=venv
+load-plugins=pylint_flask_sqlalchemy
 
 [MESSAGES CONTROL]
 disable=C0114, C0115, C0116, R0903, E1101

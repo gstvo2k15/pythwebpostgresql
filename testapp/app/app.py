@@ -19,6 +19,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 
+# pylint: disable=no-member
 
 class Visitor(db.Model):
     """
@@ -32,8 +33,8 @@ class Visitor(db.Model):
     def __repr__(self):
         return f'<Visitor {self.ip}>'
 
+# pylint: enable=no-member
 
-# pylint: disable=no-member
 @app.before_first_request
 def create_tables():
     """
