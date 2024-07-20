@@ -80,7 +80,9 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "avg_over_time(loki_ingester_chunk_entries_count[5m])",
+          "editorMode": "code",
+          "expr": "rate(loki_ingester_chunk_entries_count[5m])",
+          "range": true,
           "refId": "A"
         }
       ],
@@ -120,7 +122,8 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": {
-        "uid": "${DS_PROMETHEUS}"
+        "type": "prometheus",
+        "uid": "PBFA97CFB590B2093"
       },
       "fieldConfig": {
         "defaults": {
@@ -167,7 +170,9 @@
           "datasource": {
             "uid": "${DS_PROMETHEUS}"
           },
+          "editorMode": "code",
           "expr": "rate (loki_distributor_ingester_appends_total[1m])",
+          "range": true,
           "refId": "A"
         }
       ],
@@ -260,7 +265,9 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
+          "editorMode": "code",
           "expr": "sum (promtail_file_bytes_total{instance=~\".*\"}) by (instance)",
+          "range": true,
           "refId": "A"
         }
       ],
@@ -351,11 +358,25 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "sum (promtail_encoded_bytes_total{pod=~'.*'}) by (pod)",
+          "editorMode": "code",
+          "expr": "sum (promtail_encoded_bytes_total{host=\"loki:3100\"}) by (host)",
           "format": "time_series",
           "instant": false,
           "legendFormat": "{{ pod }}",
           "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "editorMode": "code",
+          "expr": "sum (promtail_encoded_bytes_total{pod=~'.*'}) by (pod)",
+          "format": "time_series",
+          "hide": true,
+          "instant": false,
+          "legendFormat": "{{ pod }}",
+          "refId": "C"
         }
       ],
       "thresholds": [],
@@ -397,7 +418,7 @@
     "list": []
   },
   "time": {
-    "from": "now-24h",
+    "from": "now-15m",
     "to": "now"
   },
   "timepicker": {
